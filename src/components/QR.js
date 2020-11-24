@@ -16,7 +16,9 @@ export default function QR() {
     }
 
     const imprimirInfo = () => {
-        console.log(qrSvg);
+        qrSvg.toDataURL((data) => {
+            console.log(`data:image/png;base64,${data}`);
+        });
     }
 
     const updateQR = (text) => {
