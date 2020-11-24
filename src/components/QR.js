@@ -1,14 +1,42 @@
-import React, { useState } from 'react'
-import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native'
+import React, { useState } from 'react';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, NativeModules } from 'react-native';
+import QRCode from 'react-native-qrcode-svg';
+
+
 
 export default function QR() {
 
+
     const [formQr, setFormQr] = useState('');
+    const [showQr, setShowQr] = useState(defaultQR());
+    const [qrSvg, setQrSvg] = useState({});
 
     const onChange = (e) => {
         setFormQr(e.nativeEvent.text.trim());
     }
 
+    const imprimirInfo = () => {
+        console.log(qrSvg);
+    }
+
+    const updateQR = (text) => {
+        if (text != '') {
+            return (
+                <View style={styles.qr}>
+                    <QRCode
+                        value={text}
+                        size={200}
+                        quietZone={5}
+                        logo={require('../assets/QR/logoQR.png')}
+                        logoSize={50}
+                        getRef={c => setQrSvg(c)}
+                    />
+                </View>
+            )
+        } else {
+            return defaultQR();
+        }
+    }
 
     return (
         <>
@@ -26,22 +54,35 @@ export default function QR() {
             </View>
 
             <View style={styles.actions}>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => setShowQr(updateQR(formQr))}>
                     <View style={styles.button}>
                         <Text style={styles.textButton} >Generar</Text>
                     </View>
                 </TouchableOpacity>
 
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => imprimirInfo()}>
                     <View style={styles.button}>
                         <Text style={styles.textButton} >Envíar</Text>
                     </View>
                 </TouchableOpacity>
 
             </View>
+
+            {showQr}
+
         </>
     )
+
+
+
 }
+
+const defaultQR = () => {
+    return (
+        <View></View>
+    )
+}
+
 
 const styles = StyleSheet.create({
     content: {
@@ -90,4 +131,10 @@ const styles = StyleSheet.create({
         color: '#979dac',
         textAlign: 'center',
     },
+
+    qr: {
+        width: '100%',
+        alignItems: 'center',
+        marginTop: '20%'
+    }
 })
