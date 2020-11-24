@@ -15,7 +15,7 @@ export default function QR() {
         setFormQr(e.nativeEvent.text.trim());
     }
 
-    const imprimirInfo = () => {
+    const imprimirbase64 = () => {
         qrSvg.toDataURL((data) => {
             console.log(`data:image/png;base64,${data}`);
         });
@@ -27,7 +27,7 @@ export default function QR() {
                 <View style={styles.qr}>
                     <QRCode
                         value={text}
-                        size={200}
+                        size={118}
                         quietZone={5}
                         logo={require('../assets/QR/logoQR.png')}
                         logoSize={50}
@@ -62,7 +62,7 @@ export default function QR() {
                     </View>
                 </TouchableOpacity>
 
-                <TouchableOpacity onPress={() => imprimirInfo()}>
+                <TouchableOpacity onPress={() => imprimirbase64()}>
                     <View style={styles.button}>
                         <Text style={styles.textButton} >Envíar</Text>
                     </View>
