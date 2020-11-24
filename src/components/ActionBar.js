@@ -9,19 +9,19 @@ export default function ActionBar(props) {
         <View style={styles.viewFooter}>
 
             <TouchableOpacity onPress={() => setScreen(1)}>
-                <View style={styles.viewClose}>
+                <View style={styles.viewButton}>
                     <Text style={styles.text} >QR</Text>
                 </View>
             </TouchableOpacity>
 
             <TouchableOpacity onPress={() => setScreen(2)}>
-                <View style={styles.viewClose}>
+                <View style={styles.viewButton}>
                     <Text style={styles.text} >Imagen</Text>
                 </View>
             </TouchableOpacity>
 
             <TouchableOpacity onPress={() => setScreen(3)}>
-                <View style={styles.viewClose}>
+                <View style={styles.viewButton}>
                     <Text style={styles.text} >Archivo</Text>
                 </View>
             </TouchableOpacity>
@@ -43,8 +43,8 @@ const styles = StyleSheet.create({
         marginBottom: 20
     },
 
-    viewClose: {
-        backgroundColor: '#001233',
+    viewButton: {
+        backgroundColor: '#33415c',
         borderRadius: 50,
         paddingVertical: 10,
         paddingHorizontal: 30,
