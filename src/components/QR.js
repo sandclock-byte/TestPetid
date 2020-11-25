@@ -9,16 +9,15 @@ export default function QR() {
 
     const [formQr, setFormQr] = useState('');
     const [showQr, setShowQr] = useState(defaultQR());
-    const [qrSvg, setQrSvg] = useState({});
+    const [qrBase64, setQrBase64] = useState({});
 
     const onChange = (e) => {
         setFormQr(e.nativeEvent.text.trim());
     }
 
     const imprimirbase64 = () => {
-        qrSvg.toDataURL((data) => {
-            console.log(`data:image/png;base64,${data}`);
-        });
+        console.log(qrBase64);
+    
     }
 
     const updateQR = (text) => {
@@ -30,8 +29,12 @@ export default function QR() {
                         size={118}
                         quietZone={5}
                         logo={require('../assets/QR/logoQR.png')}
-                        logoSize={50}
-                        getRef={c => setQrSvg(c)}
+                        logoSize={35}
+                        getRef={c => {
+                            c.toDataURL((data) => {
+                                setQrBase64(`data:image/png;base64,${data}`);
+                            });
+                        }}
                     />
                 </View>
             )
