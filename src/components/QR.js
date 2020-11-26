@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, NativeModules } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
 
@@ -9,7 +9,10 @@ export default function QR() {
 
     const [formQr, setFormQr] = useState('');
     const [showQr, setShowQr] = useState(defaultQR());
-    const [qrBase64, setQrBase64] = useState({});
+    const [qrBase64, setQrBase64] = useState('');
+    const [qrSvg, setQrSvg] = useState(null);
+
+
 
     const onChange = (e) => {
         setFormQr(e.nativeEvent.text.trim());
@@ -17,7 +20,13 @@ export default function QR() {
 
     const imprimirbase64 = () => {
         console.log(qrBase64);
-    
+
+    }
+
+    if (qrSvg != null) {
+        qrSvg.toDataURL((data) => {
+            setQrBase64(`data:image/png;base64,${data}`);
+        });
     }
 
     const updateQR = (text) => {
@@ -29,11 +38,9 @@ export default function QR() {
                         size={118}
                         quietZone={5}
                         logo={require('../assets/QR/logoQR.png')}
-                        logoSize={35}
+                        logoSize={30}
                         getRef={c => {
-                            c.toDataURL((data) => {
-                                setQrBase64(`data:image/png;base64,${data}`);
-                            });
+                            setQrSvg(c);
                         }}
                     />
                 </View>
