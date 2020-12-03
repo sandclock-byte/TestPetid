@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, NativeModules } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
+import base64toPixels from '../utils/base64ToPixels';
 
 
 
@@ -19,7 +20,7 @@ export default function QR() {
     }
 
     const imprimirbase64 = () => {
-        console.log(qrBase64);
+        base64toPixels(qrBase64);
 
     }
 
