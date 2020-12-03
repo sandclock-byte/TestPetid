@@ -15,7 +15,7 @@ export async function base64toPixels(base64) {
   let pixelInt = [];
   for(let i = 4; i < uInt8ClampedArray.length + 1; i += 4) {
     let arr = uInt8ClampedArray.slice(i-4, i);
-    pixelInt.push(rGBAToInt(arr));
+    pixelInt.push(aRGBToInt(arr));
   }
 
   console.log(pixelInt);
