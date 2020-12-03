@@ -12,23 +12,40 @@ export async function base64toPixels(base64) {
   // let arr = uInt8ClampedArray.slice(0, 4);
 
   // console.log(rGBAToInt(arr));
-  let pixelInt = [];
+  let pixels = [];
   let valores = [];
 
   for (let i = 4; i < uInt8ClampedArray.length + 1; i += 4) {
     let arr = uInt8ClampedArray.slice(i - 4, i);
     let valor = rGBAToInt(arr);
     valor < 252645375 ? valor = 1 : valor = 0;
-    pixelInt.push(valor);
-
+    pixels.push(valor);
     // if (valores === [] || valores.indexOf(valor) === -1) valores.push(valor);
-
   }
 
   // valores.sort((a, b) => a - b);
 
-  console.log(pixelInt);
+  // console.log(pixelInt);
+
   // console.log(valores);
+  let cArray = '0x';
+  let pareja = 0;
+  for (let i = 4; i < pixels.length + 1; i += 4) {
+    let arr = pixels.slice(i-4, i);
+    cArray += binToHex(arr);
+    pareja++;
+    if (pareja === 2 || i === pixels.length - 1) {
+      cArray += ',0x';
+      pareja = 0;
+    }
+  }
+
+  console.log(cArray);
+
+
+
+
+
 
 }
 
@@ -59,4 +76,13 @@ const aRGBToInt = (rGBA) => {
   let b = rGBA[3] & 0XFF;
 
   return (a << 24) + (r << 16) + (g << 8) + (b);
+}
+
+const hexadecimales = [...'0123456789abcdef'];
+const binToHex = (bin) => {
+  let posicionChar = 0;
+  for (let i = 0; i < 4; i++) {
+    posicionChar += bin[i] * Math.pow(2, (4 - (i + 1)));
+  }
+  return hexadecimales[posicionChar];
 }
