@@ -18,16 +18,17 @@ export async function base64toPixels(base64) {
   for (let i = 4; i < uInt8ClampedArray.length + 1; i += 4) {
     let arr = uInt8ClampedArray.slice(i - 4, i);
     let valor = rGBAToInt(arr);
+    valor < 252645375 ? valor = 1 : valor = 0;
     pixelInt.push(valor);
 
-    if (valores === [] || valores.indexOf(valor) === -1) valores.push(valor);
+    // if (valores === [] || valores.indexOf(valor) === -1) valores.push(valor);
 
   }
 
-  valores.sort((a, b) => a - b);
+  // valores.sort((a, b) => a - b);
 
   console.log(pixelInt);
-  console.log(valores);
+  // console.log(valores);
 
 }
 
