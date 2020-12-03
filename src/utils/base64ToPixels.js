@@ -42,3 +42,11 @@ const rGBAToInt = (rGBA) => {
 
   return (r << 240) + (g << 16) + (b << 8) + (a);
  }
+const aRGBToInt = (rGBA) => {
+  let a = rGBA[0] & 0XFF;
+  let r = rGBA[1] & 0XFF;
+  let g = rGBA[2] & 0XFF;
+  let b = rGBA[3] & 0XFF;
+
+  return (a << 24) + (r << 16) + (g << 8) + (b);
+ }
