@@ -13,12 +13,21 @@ export async function base64toPixels(base64) {
 
   // console.log(rGBAToInt(arr));
   let pixelInt = [];
-  for(let i = 4; i < uInt8ClampedArray.length + 1; i += 4) {
-    let arr = uInt8ClampedArray.slice(i-4, i);
-    pixelInt.push(aRGBToInt(arr));
+  let valores = [];
+
+  for (let i = 4; i < uInt8ClampedArray.length + 1; i += 4) {
+    let arr = uInt8ClampedArray.slice(i - 4, i);
+    let valor = rGBAToInt(arr);
+    pixelInt.push(valor);
+
+    if (valores === [] || valores.indexOf(valor) === -1) valores.push(valor);
+
   }
 
+  valores.sort((a, b) => a - b);
+
   console.log(pixelInt);
+  console.log(valores);
 
 }
 
@@ -40,8 +49,8 @@ const rGBAToInt = (rGBA) => {
   let b = rGBA[2] & 0XFF;
   let a = rGBA[3] & 0XFF;
 
-  return (r << 240) + (g << 16) + (b << 8) + (a);
- }
+  return (r << 24) + (g << 16) + (b << 8) + (a);
+}
 const aRGBToInt = (rGBA) => {
   let a = rGBA[0] & 0XFF;
   let r = rGBA[1] & 0XFF;
@@ -49,4 +58,4 @@ const aRGBToInt = (rGBA) => {
   let b = rGBA[3] & 0XFF;
 
   return (a << 24) + (r << 16) + (g << 8) + (b);
- }
+}
