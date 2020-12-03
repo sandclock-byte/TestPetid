@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, NativeModules } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
-import base64toPixels from '../utils/base64ToPixels';
+import { base64toPixels } from '../utils/base64ToPixels';
 
 
 
