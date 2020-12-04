@@ -7,7 +7,6 @@ export async function base64toPixels(base64) {
   base64ToUInt8ClampedArray(base64)
   await delay(1);
 
-
   let coloresDiferentes = []
   for (let x = 0; x < 200; x++) {
     for (let y = 0; y < 200; y++) {
@@ -20,11 +19,15 @@ export async function base64toPixels(base64) {
     }
   }
 
-  let a1 = [[1,2], [2], [3], [4]];
-  let a2 = [54];
+  console.log(coloresDiferentes);
 
-  console.log(isElement(a1, a2));
-  // console.log(coloresDiferentes);
+  let avg = 0;
+  for (let i = 0; i < coloresDiferentes.length; i++) {
+    avg += coloresDiferentes[i][1]; 
+  }
+  avg /= coloresDiferentes.length;
+
+  console.log(avg);
 
 
   // console.log(uInt8ClampedArray);
@@ -143,4 +146,13 @@ const binToHex = (bin) => {
     posicionChar += bin[i] * Math.pow(2, (4 - (i + 1)));
   }
   return hexadecimales[posicionChar];
+}
+
+const grayscale = (data) => {
+  for (let i = 0; i < data.length; i += 4) {
+    let avg = (data[i] + data[i + 1] + data[i + 2]) / 3;
+    data[i]     = avg; // red
+    data[i + 1] = avg; // green
+    data[i + 2] = avg; // blue
+  }
 }
