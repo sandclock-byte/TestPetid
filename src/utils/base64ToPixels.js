@@ -7,28 +7,11 @@ export async function base64toPixels(base64) {
   base64ToUInt8ClampedArray(base64)
   await delay(1);
 
-  let pixels = [];
+  toEpaper(uInt8ClampedArray);
 
-  for (let i = 4; i < uInt8ClampedArray.length + 1; i += 4) {
-    let arr = uInt8ClampedArray.slice(i - 4, i);
-    let valor = arr[1];
-    valor > 115 ? valor = 1 : valor = 0;
-    pixels.push(valor);
-  }
+  
 
-  let cArray = '0x';
-  let pareja = 0;
-  for (let i = 4; i < pixels.length - 1; i += 4) {
-    let arr = pixels.slice(i - 4, i);
-    cArray += binToHex(arr);
-    pareja++;
-    if (pareja === 2) {
-      if (i !== pixels.length - 5) cArray += ',0x';
-      pareja = 0;
-    }
-  }
-
-  console.log(cArray);
+  // console.log(cArray);
 
 }
 
@@ -65,4 +48,40 @@ const binToHex = (bin) => {
     posicionChar += bin[i] * Math.pow(2, (4 - (i + 1)));
   }
   return hexadecimales[posicionChar];
+}
+
+const toEpaper = (uInt8ClampedArray) => {
+  let pixels = [];
+
+  for (let i = 4; i < uInt8ClampedArray.length; i += 4) {
+    let arr = uInt8ClampedArray.slice(i - 4, i);
+    let valor = arr[1];
+    valor > 115 ? valor = 1 : valor = 0;
+    pixels.push(valor);
+  }
+
+  let binario = [];
+  for (let i = 4; i < pixels.length; i += 4) {
+    binario.push(pixels.slice(i - 4, i));
+  }
+
+  console.log(binario);
+
+  // let cArray = '0x';
+  // for (let i = 4; i < pixels.length - 5; i += 4) {
+  //     let arr = pixels.slice(i - 4, i);
+  //     cArray += binToHex(arr);
+  //     if ()
+  // }
+
+  // let cArray = '0x';
+  // let pareja = 0;
+  // for (let i = 4; i < pixels.length - 5; i += 4) {
+  //   let arr = pixels.slice(i - 4, i);
+  //   cArray += binToHex(arr);
+  //   pareja++;
+  //   if ((pareja % 2) === 0) {
+  //     if (pareja !== 10000) cArray += ',0x';
+  //   }
+  // }
 }
