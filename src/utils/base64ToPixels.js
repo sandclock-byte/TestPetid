@@ -7,65 +7,62 @@ export async function base64toPixels(base64) {
   base64ToUInt8ClampedArray(base64)
   await delay(1);
 
-  let coloresDiferentes = []
-  for (let x = 0; x < 200; x++) {
-    for (let y = 0; y < 200; y++) {
-      let arr = getPixel(x, y);
-      if (coloresDiferentes !== []) {
-        if (!isElement(coloresDiferentes, arr)) coloresDiferentes.push(arr);
-      } else {
-        coloresDiferentes.push(arr);
-      }
-    }
-  }
+  // let coloresDiferentes = []
+  // for (let x = 0; x < 200; x++) {
+  //   for (let y = 0; y < 200; y++) {
+  //     let arr = getPixel(x, y);
+  //     if (coloresDiferentes !== []) {
+  //       if (!isElement(coloresDiferentes, arr)) coloresDiferentes.push(arr);
+  //     } else {
+  //       coloresDiferentes.push(arr);
+  //     }
+  //   }
+  // }
 
-  console.log(coloresDiferentes);
+  // console.log(coloresDiferentes);
 
-  let avg = 0;
-  for (let i = 0; i < coloresDiferentes.length; i++) {
-    avg += coloresDiferentes[i][1]; 
-  }
-  avg /= coloresDiferentes.length;
+  // let avg = 0;
+  // for (let i = 0; i < coloresDiferentes.length; i++) {
+  //   avg += coloresDiferentes[i][1]; 
+  // }
+  // avg /= coloresDiferentes.length;
 
-  console.log(avg);
+  // console.log(avg);
 
 
   // console.log(uInt8ClampedArray);
 
-  // let arr = uInt8ClampedArray.slice(0, 4);
+ 
+  let pixels = [];
 
-  // console.log(rGBAToInt(arr));
-  // let pixels = [];
-  // let valores = [];
-
-  // for (let i = 4; i < uInt8ClampedArray.length + 1; i += 4) {
-  //   let arr = uInt8ClampedArray.slice(i - 4, i);
-  //   // let valor = rGBAToInt(arr);
-  //   let valor = aRGBToInt(arr);
-  //   // valor < 252645375 ? valor = 1 : valor = 0;
-  //   pixels.push(valor);
-  //   if (valores === [] || valores.indexOf(valor) === -1) valores.push(valor);
-  // }
+  for (let i = 4; i < uInt8ClampedArray.length + 1; i += 4) {
+    let arr = uInt8ClampedArray.slice(i - 4, i);
+    // let valor = rGBAToInt(arr);
+    let valor = arr[1];
+    valor > 115 ? valor = 1 : valor = 0;
+    pixels.push(valor);
+    // if (valores === [] || valores.indexOf(valor) === -1) valores.push(valor);
+  }
 
   // valores.sort((a, b) => a - b);
 
-  // // console.log(pixelInt);
+  // console.log(pixelInt);
 
-  // console.log(valores);
+ 
 
-  // let cArray = '0x';
-  // let pareja = 0;
-  // for (let i = 4; i < pixels.length + 1; i += 4) {
-  //   let arr = pixels.slice(i-4, i);
-  //   cArray += binToHex(arr);
-  //   pareja++;
-  //   if (pareja === 2 || i === pixels.length - 1) {
-  //     cArray += ',0x';
-  //     pareja = 0;
-  //   }
-  // }
+  let cArray = '0x';
+  let pareja = 0;
+  for (let i = 4; i < pixels.length + 1; i += 4) {
+    let arr = pixels.slice(i-4, i);
+    cArray += binToHex(arr);
+    pareja++;
+    if (pareja === 2 || i === pixels.length - 1) {
+      cArray += ',0x';
+      pareja = 0;
+    }
+  }
 
-  // console.log(cArray);
+  console.log(cArray);
 
 
 
