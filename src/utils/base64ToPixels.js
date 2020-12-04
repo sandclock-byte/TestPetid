@@ -7,11 +7,19 @@ export async function base64toPixels(base64) {
   base64ToUInt8ClampedArray(base64)
   await delay(1);
 
-  let arr = getColorIndicesForCoord(199, 199);
 
-  let color = []
-  for (let i = 0; i < arr.length; i++) {
-    color.push(uInt8ClampedArray[arr[i]]);
+  let coloresDiferentes = []
+  for (let x = 0; x < uInt8ClampedArray.length; x++) {
+    for (let y = 0; y < uInt8ClampedArray.length; y++) {
+      let arr = getPixel(x, y);
+      if (coloresDiferentes !== []) {
+        if (!isElement(coloresDiferentes, arr)) coloresDiferentes.push(arr);
+
+      } else {
+        coloresDiferentes.push(arr);
+      }
+
+    }
   }
 
   console.log(uInt8ClampedArray);
@@ -69,6 +77,10 @@ function base64ToUInt8ClampedArray(base64) {
   const reader = new PNGReader(pngBytes);
 
   reader.parse((err, png) => {
+    if (err) {
+      console.error(err)
+      return
+    }
     uInt8ClampedArray = (png.pixels);
   })
 }
@@ -94,6 +106,13 @@ const aRGBToInt = (rGBA) => {
   return (a << 24) + (r << 16) + (g << 8);
 }
 
+const arrayEqual = (a, b) => {
+  for (var i = 0; i < a.length; ++i) {
+    if (a[i] !== b[i]) return false;
+  }
+  return true;
+}
+
 const getPixel = (x, y) => {
   const red = y * (200 * 4) + x * 4;
   return [
@@ -103,6 +122,19 @@ const getPixel = (x, y) => {
     uInt8ClampedArray[red + 3]
   ];
 };
+
+const isElement = (arr1, arr2) => {
+  let isElement = false;
+  for (let i = 0; i < arr1.length; i++) {
+    if (arrayEqual(arr1[i], arr2)) {
+      isElement = true;
+    } else {
+      isElement = false;
+      break;
+    }
+  }
+  return isElement;
+}
 
 const hexadecimales = [...'0123456789abcdef'];
 const binToHex = (bin) => {
