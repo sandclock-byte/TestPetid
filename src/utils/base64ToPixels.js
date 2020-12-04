@@ -7,40 +7,54 @@ export async function base64toPixels(base64) {
   base64ToUInt8ClampedArray(base64)
   await delay(1);
 
+  let arr = getColorIndicesForCoord(199, 199);
+
+  let color = []
+  for (let i = 0; i < arr.length; i++) {
+    color.push(uInt8ClampedArray[arr[i]]);
+  }
+
+  console.log(uInt8ClampedArray);
+  console.log(arr);
+  console.log(color);
+
+
   // console.log(uInt8ClampedArray);
 
   // let arr = uInt8ClampedArray.slice(0, 4);
 
   // console.log(rGBAToInt(arr));
-  let pixels = [];
-  let valores = [];
+  // let pixels = [];
+  // let valores = [];
 
-  for (let i = 4; i < uInt8ClampedArray.length + 1; i += 4) {
-    let arr = uInt8ClampedArray.slice(i - 4, i);
-    let valor = rGBAToInt(arr);
-    valor < 252645375 ? valor = 1 : valor = 0;
-    pixels.push(valor);
-    // if (valores === [] || valores.indexOf(valor) === -1) valores.push(valor);
-  }
+  // for (let i = 4; i < uInt8ClampedArray.length + 1; i += 4) {
+  //   let arr = uInt8ClampedArray.slice(i - 4, i);
+  //   // let valor = rGBAToInt(arr);
+  //   let valor = aRGBToInt(arr);
+  //   // valor < 252645375 ? valor = 1 : valor = 0;
+  //   pixels.push(valor);
+  //   if (valores === [] || valores.indexOf(valor) === -1) valores.push(valor);
+  // }
 
   // valores.sort((a, b) => a - b);
 
-  // console.log(pixelInt);
+  // // console.log(pixelInt);
 
   // console.log(valores);
-  let cArray = '0x';
-  let pareja = 0;
-  for (let i = 4; i < pixels.length + 1; i += 4) {
-    let arr = pixels.slice(i-4, i);
-    cArray += binToHex(arr);
-    pareja++;
-    if (pareja === 2 || i === pixels.length - 1) {
-      cArray += ',0x';
-      pareja = 0;
-    }
-  }
 
-  console.log(cArray);
+  // let cArray = '0x';
+  // let pareja = 0;
+  // for (let i = 4; i < pixels.length + 1; i += 4) {
+  //   let arr = pixels.slice(i-4, i);
+  //   cArray += binToHex(arr);
+  //   pareja++;
+  //   if (pareja === 2 || i === pixels.length - 1) {
+  //     cArray += ',0x';
+  //     pareja = 0;
+  //   }
+  // }
+
+  // console.log(cArray);
 
 
 
@@ -67,7 +81,8 @@ const rGBAToInt = (rGBA) => {
   let b = rGBA[2] & 0XFF;
   let a = rGBA[3] & 0XFF;
 
-  return (r << 24) + (g << 16) + (b << 8) + (a);
+  // return (r << 24) + (g << 16) + (b << 8) + (a);
+  return (r << 24) + (g << 16) + (b << 8);
 }
 const aRGBToInt = (rGBA) => {
   let a = rGBA[0] & 0XFF;
@@ -75,8 +90,19 @@ const aRGBToInt = (rGBA) => {
   let g = rGBA[2] & 0XFF;
   let b = rGBA[3] & 0XFF;
 
-  return (a << 24) + (r << 16) + (g << 8) + (b);
+  // return (a << 24) + (r << 16) + (g << 8) + (b);
+  return (a << 24) + (r << 16) + (g << 8);
 }
+
+const getPixel = (x, y) => {
+  const red = y * (200 * 4) + x * 4;
+  return [
+    uInt8ClampedArray[red],
+    uInt8ClampedArray[red + 1],
+    uInt8ClampedArray[red + 2],
+    uInt8ClampedArray[red + 3]
+  ];
+};
 
 const hexadecimales = [...'0123456789abcdef'];
 const binToHex = (bin) => {
