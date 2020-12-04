@@ -9,22 +9,22 @@ export async function base64toPixels(base64) {
 
 
   let coloresDiferentes = []
-  for (let x = 0; x < uInt8ClampedArray.length; x++) {
-    for (let y = 0; y < uInt8ClampedArray.length; y++) {
+  for (let x = 0; x < 200; x++) {
+    for (let y = 0; y < 200; y++) {
       let arr = getPixel(x, y);
       if (coloresDiferentes !== []) {
         if (!isElement(coloresDiferentes, arr)) coloresDiferentes.push(arr);
-
       } else {
         coloresDiferentes.push(arr);
       }
-
     }
   }
 
-  console.log(uInt8ClampedArray);
-  console.log(arr);
-  console.log(color);
+  let a1 = [[1,2], [2], [3], [4]];
+  let a2 = [54];
+
+  console.log(isElement(a1, a2));
+  // console.log(coloresDiferentes);
 
 
   // console.log(uInt8ClampedArray);
@@ -126,10 +126,10 @@ const getPixel = (x, y) => {
 const isElement = (arr1, arr2) => {
   let isElement = false;
   for (let i = 0; i < arr1.length; i++) {
-    if (arrayEqual(arr1[i], arr2)) {
-      isElement = true;
-    } else {
+    if (!arrayEqual(arr1[i], arr2)) {
       isElement = false;
+    } else {
+      isElement = true;
       break;
     }
   }
