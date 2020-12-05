@@ -2,12 +2,12 @@ import PNGReader from '../utils/png';
 
 
 let uInt8ClampedArray = [];
-export async function base64toPixels(base64) {
+export async function base64toEpaper(base64) {
 
   base64ToUInt8ClampedArray(base64)
   await delay(1);
 
-  console.log(toEpaper(uInt8ClampedArray));
+  return toEpaper(uInt8ClampedArray);
 }
 
 function base64ToUInt8ClampedArray(base64) {
