@@ -9,7 +9,7 @@ export async function base64toPixels(base64) {
 
   toEpaper(uInt8ClampedArray);
 
-  
+
 
   // console.log(cArray);
 
@@ -55,7 +55,7 @@ const toEpaper = (uInt8ClampedArray) => {
 
   for (let i = 4; i < uInt8ClampedArray.length; i += 4) {
     let arr = uInt8ClampedArray.slice(i - 4, i);
-    let valor = arr[1];
+    let valor = arr[0];
     valor > 115 ? valor = 1 : valor = 0;
     pixels.push(valor);
   }
@@ -65,7 +65,15 @@ const toEpaper = (uInt8ClampedArray) => {
     binario.push(pixels.slice(i - 4, i));
   }
 
-  console.log(binario);
+  let cArray = '';
+  for (let i = 1; i < binario.length; i += 2) {
+    cArray += `0x${binToHex(binario[i - 1]) + binToHex(binario[i])}`;
+    if(i !== binario.length - 2) cArray += ',';
+    // if(i === binario.length - 2) console.log(i);
+  }
+
+  console.log(cArray);
+
 
   // let cArray = '0x';
   // for (let i = 4; i < pixels.length - 5; i += 4) {
