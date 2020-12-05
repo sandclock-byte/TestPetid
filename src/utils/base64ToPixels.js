@@ -7,16 +7,11 @@ export async function base64toPixels(base64) {
   base64ToUInt8ClampedArray(base64)
   await delay(1);
 
-  toEpaper(uInt8ClampedArray);
-
-
-
-  // console.log(cArray);
-
+  console.log(toEpaper(uInt8ClampedArray));
 }
 
 function base64ToUInt8ClampedArray(base64) {
-  const base64Data = base64.slice(22); // removes the preamble ("data:image/png;base64,")
+  const base64Data = base64.slice(22); // remueve el segmento ("data:image/png;base64,")
   const pngBytes = atob(base64Data);
   const reader = new PNGReader(pngBytes);
 
@@ -31,15 +26,6 @@ function base64ToUInt8ClampedArray(base64) {
 
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
-const getPixel = (x, y) => {
-  const red = y * (200 * 4) + x * 4;
-  return [
-    uInt8ClampedArray[red],
-    uInt8ClampedArray[red + 1],
-    uInt8ClampedArray[red + 2],
-    uInt8ClampedArray[red + 3]
-  ];
-};
 
 const hexadecimales = [...'0123456789abcdef'];
 const binToHex = (bin) => {
@@ -56,7 +42,7 @@ const toEpaper = (uInt8ClampedArray) => {
   for (let i = 4; i < uInt8ClampedArray.length; i += 4) {
     let arr = uInt8ClampedArray.slice(i - 4, i);
     let valor = arr[0];
-    valor > 115 ? valor = 1 : valor = 0;
+    valor >= 128 ? valor = 1 : valor = 0;
     pixels.push(valor);
   }
 
@@ -69,27 +55,7 @@ const toEpaper = (uInt8ClampedArray) => {
   for (let i = 1; i < binario.length; i += 2) {
     cArray += `0x${binToHex(binario[i - 1]) + binToHex(binario[i])}`;
     if(i !== binario.length - 2) cArray += ',';
-    // if(i === binario.length - 2) console.log(i);
   }
 
-  console.log(cArray);
-
-
-  // let cArray = '0x';
-  // for (let i = 4; i < pixels.length - 5; i += 4) {
-  //     let arr = pixels.slice(i - 4, i);
-  //     cArray += binToHex(arr);
-  //     if ()
-  // }
-
-  // let cArray = '0x';
-  // let pareja = 0;
-  // for (let i = 4; i < pixels.length - 5; i += 4) {
-  //   let arr = pixels.slice(i - 4, i);
-  //   cArray += binToHex(arr);
-  //   pareja++;
-  //   if ((pareja % 2) === 0) {
-  //     if (pareja !== 10000) cArray += ',0x';
-  //   }
-  // }
+  return cArray;
 }
