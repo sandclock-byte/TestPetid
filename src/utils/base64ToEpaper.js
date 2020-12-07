@@ -2,12 +2,12 @@ import PNGReader from '../utils/png';
 
 
 let uInt8ClampedArray = [];
-export async function base64toEpaper(base64) {
+export async function base64toEpaper(base64, setCArray) {
 
   base64ToUInt8ClampedArray(base64)
   await delay(1);
 
-  return toEpaper(uInt8ClampedArray);
+  toEpaper(uInt8ClampedArray, setCArray);
 }
 
 function base64ToUInt8ClampedArray(base64) {
@@ -36,7 +36,7 @@ const binToHex = (bin) => {
   return hexadecimales[posicionChar];
 }
 
-const toEpaper = (uInt8ClampedArray) => {
+const toEpaper = (uInt8ClampedArray, setCArray) => {
   let pixels = [];
 
   for (let i = 4; i < uInt8ClampedArray.length; i += 4) {
@@ -57,5 +57,5 @@ const toEpaper = (uInt8ClampedArray) => {
     if(i !== binario.length - 2) cArray += ',';
   }
 
-  return cArray;
+  setCArray(cArray);
 }
