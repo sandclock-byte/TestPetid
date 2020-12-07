@@ -16,11 +16,16 @@ export async function base64toEpaper(base64, setCArray) {
     // response.size is the size of the new image
     path = response.uri;
   })
-  await delay(1);
-
+  await delay(100);
+  
   console.log(path);
-
-
+  
+  ImgToBase64.getBase64String(path)
+  .then(base64String => base64Resized = base64String);
+  
+  await delay(100);
+  console.log(base64Resized);
+  
 
   // base64ToUInt8ClampedArray(base64Resized)
   // await delay(1);
