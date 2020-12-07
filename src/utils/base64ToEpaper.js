@@ -18,24 +18,25 @@ export async function base64toEpaper(base64, setCArray) {
   })
   await delay(100);
   
-  console.log(path);
+  // console.log(path);
   
   ImgToBase64.getBase64String(path)
   .then(base64String => base64Resized = base64String);
   
   await delay(100);
-  console.log(base64Resized);
+  // console.log(base64Resized);
   
 
-  // base64ToUInt8ClampedArray(base64Resized)
-  // await delay(1);
+  base64ToUInt8ClampedArray(base64Resized)
+  await delay(1);
 
-  // toEpaper(uInt8ClampedArray, setCArray);
+  toEpaper(uInt8ClampedArray, setCArray);
 }
 
 function base64ToUInt8ClampedArray(base64) {
-  const base64Data = base64.slice(22); // remueve el segmento ("data:image/png;base64,")
-  const pngBytes = atob(base64Data);
+  // const base64Data = base64.slice(22); // remueve el segmento ("data:image/png;base64,")
+  // const pngBytes = atob(base64Data);
+  const pngBytes = atob(base64);
   const reader = new PNGReader(pngBytes);
 
   reader.parse((err, png) => {
