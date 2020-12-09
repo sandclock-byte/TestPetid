@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, NativeModules } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
+import { base64toEpaper } from '../utils/base64ToEpaper';
 
 
 
@@ -11,6 +12,11 @@ export default function QR() {
     const [showQr, setShowQr] = useState(defaultQR());
     const [qrBase64, setQrBase64] = useState('');
     const [qrSvg, setQrSvg] = useState(null);
+    const [cArray, setCArray] = useState('');
+
+    useEffect(() => {
+        console.log(cArray);
+    }, [cArray])
 
 
 
@@ -19,8 +25,7 @@ export default function QR() {
     }
 
     const imprimirbase64 = () => {
-        console.log(qrBase64);
-
+        base64toEpaper(qrBase64, setCArray);
     }
 
     if (qrSvg != null) {
