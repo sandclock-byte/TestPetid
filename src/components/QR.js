@@ -15,7 +15,8 @@ export default function QR() {
     const [cArray, setCArray] = useState('');
 
     useEffect(() => {
-        console.log(cArray);
+        if(cArray !== '') console.log(cArray);
+        setCArray('');
     }, [cArray])
 
 
@@ -24,7 +25,7 @@ export default function QR() {
         setFormQr(e.nativeEvent.text.trim());
     }
 
-    const imprimirbase64 = () => {
+    const enviarQR = () => {
         base64toEpaper(qrBase64, setCArray);
     }
 
@@ -40,10 +41,10 @@ export default function QR() {
                 <View style={styles.qr}>
                     <QRCode
                         value={text}
-                        size={118}
-                        quietZone={5}
+                        size={200}
+                        quietZone={7}
                         logo={require('../assets/QR/logoQR.png')}
-                        logoSize={30}
+                        logoSize={60}
                         getRef={c => {
                             setQrSvg(c);
                         }}
@@ -77,7 +78,7 @@ export default function QR() {
                     </View>
                 </TouchableOpacity>
 
-                <TouchableOpacity onPress={() => imprimirbase64()}>
+                <TouchableOpacity onPress={() => enviarQR()}>
                     <View style={styles.button}>
                         <Text style={styles.textButton} >Envíar</Text>
                     </View>
