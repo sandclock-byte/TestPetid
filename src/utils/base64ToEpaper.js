@@ -1,18 +1,42 @@
 import PNGReader from '../utils/png';
+import ImageResizer from 'react-native-image-resizer';
+import ImgToBase64 from 'react-native-image-base64';
 
 
 let uInt8ClampedArray = [];
+let base64Resized;
+let path;
 export async function base64toEpaper(base64, setCArray) {
 
-  base64ToUInt8ClampedArray(base64)
+  ImageResizer.createResizedImage(base64, 200, 200,'PNG', 100)
+  .then(response => {
+    // response.uri is the URI of the new image that can now be displayed, uploaded...
+    // response.path is the path of the new image
+    // response.name is the name of the new image with the extension
+    // response.size is the size of the new image
+    path = response.uri;
+  })
+  await delay(100);
+  
+  // console.log(path);
+  
+  ImgToBase64.getBase64String(path)
+  .then(base64String => base64Resized = base64String);
+  
+  await delay(100);
+  // console.log(base64Resized);
+  
+
+  base64ToUInt8ClampedArray(base64Resized)
   await delay(1);
 
   toEpaper(uInt8ClampedArray, setCArray);
 }
 
 function base64ToUInt8ClampedArray(base64) {
-  const base64Data = base64.slice(22); // remueve el segmento ("data:image/png;base64,")
-  const pngBytes = atob(base64Data);
+  // const base64Data = base64.slice(22); // remueve el segmento ("data:image/png;base64,")
+  // const pngBytes = atob(base64Data);
+  const pngBytes = atob(base64);
   const reader = new PNGReader(pngBytes);
 
   reader.parse((err, png) => {
