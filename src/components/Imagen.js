@@ -10,7 +10,7 @@ export default function Imagen() {
                 <Text style={styles.text}>Selecciona una Imagen</Text>
             </View>
 
-            <View style={{alignItems: 'center'}}>
+            <View style={styles.viewButtonCamera}>
                 <TouchableOpacity onPress={() => { }}>
                     <View style={styles.cameraButton}>
                         <Image
@@ -36,8 +36,14 @@ const styles = StyleSheet.create({
         fontSize: 22,
     },
 
+    viewButtonCamera: {
+        alignItems: 'center',
+        position: 'absolute',
+        bottom: 55, width: '100%',
+    },
+
     cameraButton: {
-        marginTop: '5%',
+        marginBottom: 40,
         backgroundColor: '#33415c',
         borderRadius: 20,
         paddingVertical: 10,
