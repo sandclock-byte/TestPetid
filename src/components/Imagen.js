@@ -18,6 +18,14 @@ export default function Imagen() {
                         />
                     </View>
                 </TouchableOpacity>
+            
+                <TouchableOpacity onPress={() => { }}>
+                    <View style={styles.cameraButton}>
+                        <Image
+                            source={require('../assets/Imagen/galleryIcon.png')}
+                        />
+                    </View>
+                </TouchableOpacity>
             </View>
 
         </>
@@ -37,7 +45,10 @@ const styles = StyleSheet.create({
     },
 
     viewButtonCamera: {
+        flexDirection: 'row',
+        marginHorizontal: 0,
         alignItems: 'center',
+        justifyContent: 'space-evenly',
         position: 'absolute',
         bottom: 55, width: '100%',
     },
