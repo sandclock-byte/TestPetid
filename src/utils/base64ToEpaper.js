@@ -46,8 +46,8 @@ export async function base64toEpaper(base64, setCArray) {
 
   await performTimeConsumingTask();
 
-  console.log(base64Resized);
   // console.log(uInt8ClampedArray);
+  toEpaper(uInt8ClampedArray, setCArray);
 
 
 
@@ -85,8 +85,8 @@ const performTimeConsumingTask = async () => {
 const hexadecimales = [...'0123456789abcdef'];
 const binToHex = (bin) => {
   let posicionChar = 0;
-  for (let i = 0; i < 4; i++) {
-    posicionChar += bin[i] * Math.pow(2, (4 - (i + 1)));
+  for (let i = 0; i < bin.length; i++) {
+    posicionChar += bin[i] * Math.pow(2, (bin.length - (i + 1)));
   }
   return hexadecimales[posicionChar];
 }
@@ -94,10 +94,14 @@ const binToHex = (bin) => {
 /** Método que toma la información de pixeles y modifica estado con el formato Epaper. */
 const toEpaper = (uInt8ClampedArray, setCArray) => {
 
+  const pixelLength = uInt8ClampedArray.length / 40000; 
+
+
+
   // Tomamos la información de los pixeles y los tranformamos en binarios
   let pixels = [];
-  for (let i = 4; i < uInt8ClampedArray.length; i += 4) {
-    let arr = uInt8ClampedArray.slice(i - 4, i); // Agrupamos en 4 porque el pixel está en RGBA
+  for (let i = pixelLength; i < uInt8ClampedArray.length; i += pixelLength) {
+    let arr = uInt8ClampedArray.slice(i - pixelLength, i); // Agrupamos en 4 porque el pixel está en RGBA
     let valor = arr[0];
     valor >= 128 ? valor = 1 : valor = 0; // Asignamos el valor de 1 si está mas cerca del blanco y 0 si esta más cerca del negro
     pixels.push(valor);
@@ -105,8 +109,8 @@ const toEpaper = (uInt8ClampedArray, setCArray) => {
 
   // Se juntan los binarios en grupos de 4
   let binario = [];
-  for (let i = 4; i < pixels.length; i += 4) {
-    binario.push(pixels.slice(i - 4, i));
+  for (let i = pixelLength; i < pixels.length; i += pixelLength) {
+    binario.push(pixels.slice(i - pixelLength, i));
   }
 
   // Se Genera la cadena con el formato para Epaper
