@@ -14,51 +14,48 @@ import ImgToBase64 from 'react-native-image-base64';
      */
 
 /** Variable dónde se van a guardar los pixeles en RGBA */
-let uInt8ClampedArray = [];
+
 
 /** Método que se exporta, hace mención de los demás métodos para ejecutar el proceso */
 export async function base64toEpaper(base64, setCArray) {
 
   /** Aquí tomamos el base64 de una Imagen, se redimesiona a 200x200px y se obtiene la uri */
-  let uri;
-  ImageResizer.createResizedImage(base64, 200, 200, 'PNG', 100)
+  let uri = await ImageResizer.createResizedImage(base64, 200, 200, 'PNG', 100)
     .then(response => {
-      uri = response.uri;
-    })
+      return response.uri;
+    });
 
-  /** Damos un retraso de 10ms para esperar que la promesa asigne valor a uri */
-  await delay(10);
-  
+  // /** Damos un retraso de 10ms para esperar que la promesa asigne valor a uri */
+  // await delay(10);
+
   /** Se toma la uri y se obtiene base64 de imagen redimensionada */
-  let base64Resized;
-  ImgToBase64.getBase64String(uri)
-  .then(base64String => base64Resized = base64String);
-  
-  /** Damos un retraso de 10ms para esperar que la promesa asigne valor a base64Resized */
-  await delay(10);
-  
-  /** Se asigna en uInt8ClampedArray los valores de los pixeles en RGBA */
-  base64ToUInt8ClampedArray(base64Resized)
-  
-  /** Damos un retraso de 10ms para esperar que la promesa asigne valor a uInt8ClampedArray */
-  await delay(10);
+  let base64Resized = await ImgToBase64.getBase64String(uri)
+    .then(base64String => {
+      return base64String
+    });
 
-  /** Se pasan la información de los Pixeles y se asigna a estado el formato para Epaper*/
-  toEpaper(uInt8ClampedArray, setCArray);
+  // /** Damos un retraso de 10ms para esperar que la promesa asigne valor a base64Resized */
+  // await delay(10);
+
+  /** Se asigna en uInt8ClampedArray los valores de los pixeles en RGBA */
+  let uInt8ClampedArray = base64ToUInt8ClampedArray(base64Resized)
+
+  console.log(uInt8ClampedArray);
+
+  // /** Damos un retraso de 10ms para esperar que la promesa asigne valor a uInt8ClampedArray */
+  // // await delay(10);
+
+  // /** Se pasan la información de los Pixeles y se asigna a estado el formato para Epaper*/
+  // toEpaper(uInt8ClampedArray, setCArray);
 }
 
 /** Método que se encarga de obtener la información de pixeles del base64 de Imagen */
-function base64ToUInt8ClampedArray(base64) {
+function base64ToUInt8ClampedArray(base64, callback) {
   const pngBytes = atob(base64);
   const reader = new PNGReader(pngBytes);
-
   reader.parse((err, png) => {
-    if (err) {
-      console.error(err)
-      return
-    }
-    uInt8ClampedArray = (png.pixels);
-  })
+    callback(png.pixels);
+  });
 }
 
 /** Método que nos permite hacer un retraso en Ms */
@@ -77,7 +74,7 @@ const binToHex = (bin) => {
 
 /** Método que toma la información de pixeles y modifica estado con el formato Epaper. */
 const toEpaper = (uInt8ClampedArray, setCArray) => {
-  
+
   // Tomamos la información de los pixeles y los tranformamos en binarios
   let pixels = [];
   for (let i = 4; i < uInt8ClampedArray.length; i += 4) {
