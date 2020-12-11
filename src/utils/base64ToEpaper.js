@@ -38,9 +38,19 @@ export async function base64toEpaper(base64, setCArray) {
   // await delay(10);
 
   /** Se asigna en uInt8ClampedArray los valores de los pixeles en RGBA */
-  let uInt8ClampedArray = base64ToUInt8ClampedArray(base64Resized)
 
-  console.log(uInt8ClampedArray);
+  let uInt8ClampedArray;
+  base64ToUInt8ClampedArray(base64Resized, pix => {
+    uInt8ClampedArray = pix;
+  });
+
+  await performTimeConsumingTask();
+
+  console.log(base64Resized);
+  // console.log(uInt8ClampedArray);
+
+
+
 
   // /** Damos un retraso de 10ms para esperar que la promesa asigne valor a uInt8ClampedArray */
   // // await delay(10);
@@ -60,6 +70,15 @@ function base64ToUInt8ClampedArray(base64, callback) {
 
 /** Método que nos permite hacer un retraso en Ms */
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+const performTimeConsumingTask = async () => {
+  return new Promise((resolve) =>
+    setTimeout(
+      () => { resolve('result') },
+      3000
+    )
+  );
+}
 
 
 /** Método que tranforma binarios en Hexadecimales */
