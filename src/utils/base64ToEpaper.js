@@ -109,8 +109,8 @@ const toEpaper = (uInt8ClampedArray, setCArray) => {
 
   // Se juntan los binarios en grupos de 4
   let binario = [];
-  for (let i = pixelLength; i < pixels.length; i += pixelLength) {
-    binario.push(pixels.slice(i - pixelLength, i));
+  for (let i = 4; i < pixels.length; i += 4) {
+    binario.push(pixels.slice(i - 4, i));
   }
 
   // Se Genera la cadena con el formato para Epaper
