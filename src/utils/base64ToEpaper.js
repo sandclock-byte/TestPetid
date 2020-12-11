@@ -39,15 +39,13 @@ export async function base64toEpaper(base64, setCArray) {
 
   /** Se asigna en uInt8ClampedArray los valores de los pixeles en RGBA */
 
-  let uInt8ClampedArray;
-  base64ToUInt8ClampedArray(base64Resized, pix => {
-    uInt8ClampedArray = pix;
+  base64ToUInt8ClampedArray(base64Resized, uInt8ClampedArray => {
+    toEpaper(uInt8ClampedArray, setCArray);
   });
 
-  await performTimeConsumingTask();
+  // await performTimeConsumingTask();
 
   // console.log(uInt8ClampedArray);
-  toEpaper(uInt8ClampedArray, setCArray);
 
 
 
@@ -85,8 +83,8 @@ const performTimeConsumingTask = async () => {
 const hexadecimales = [...'0123456789abcdef'];
 const binToHex = (bin) => {
   let posicionChar = 0;
-  for (let i = 0; i < bin.length; i++) {
-    posicionChar += bin[i] * Math.pow(2, (bin.length - (i + 1)));
+  for (let i = 0; i < 4; i++) {
+    posicionChar += bin[i] * Math.pow(2, (4 - (i + 1)));
   }
   return hexadecimales[posicionChar];
 }
@@ -94,7 +92,7 @@ const binToHex = (bin) => {
 /** Método que toma la información de pixeles y modifica estado con el formato Epaper. */
 const toEpaper = (uInt8ClampedArray, setCArray) => {
 
-  const pixelLength = uInt8ClampedArray.length / 40000; 
+  const pixelLength = uInt8ClampedArray.length / 40000;
 
 
 
