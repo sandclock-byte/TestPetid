@@ -131,9 +131,9 @@ const styles = StyleSheet.create({
     actions: {
         width: '100%',
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        justifyContent: 'space-evenly',
         alignItems: 'center',
-        paddingHorizontal: 70,
+        paddingHorizontal: 10,
     },
 
     button: {
