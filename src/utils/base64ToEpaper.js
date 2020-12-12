@@ -7,7 +7,7 @@ import ImgToBase64 from 'react-native-image-base64';
      * y modifica un estado para envíarlo
      * 
      * @param { base64 } "Información de imagen en base64"
-     * @param { setCArray } "Función que modifica estado"
+     * @param { setValue } "Función que modifica estado"
      *
      * @author   Fernando Bernal Díaz (fernando.bernal@ditems.com)
      * @license  DITEMS
@@ -28,9 +28,9 @@ export async function base64toEpaper(base64, setValue) {
       return base64String
     });
 
-  /** Se asigna en uInt8ClampedArray los valores de los pixeles en RGBA */
+  /** Se asigna en uInt8ClampedArray los valores de los pixeles puede ser en RGB o RGBA depende del móvil */
   base64ToUInt8ClampedArray(base64Resized, uInt8ClampedArray => {
-    /** Se pasan la información de los Pixeles y se asigna a estado el formato para Epaper*/
+    /** Se pasa la información de los Pixeles y se asigna a estado el formato para Epaper*/
     toEpaper(uInt8ClampedArray, setValue);
   });
 }
@@ -44,7 +44,7 @@ function base64ToUInt8ClampedArray(base64, callback) {
   });
 }
 
-/** Método que tranforma binarios en Hexadecimales */
+/** Método que transforma binarios en Hexadecimales */
 const hexadecimales = [...'0123456789abcdef'];
 const binToHex = (bin) => {
   let posicionChar = 0;
@@ -57,12 +57,13 @@ const binToHex = (bin) => {
 /** Método que toma la información de pixeles y modifica estado con el formato Epaper. */
 const toEpaper = (uInt8ClampedArray, setValue) => {
 
+  // Esta constante nos sirve para identificar si la información del Pixel es RGBA o RGB
   const pixelLength = uInt8ClampedArray.length / 40000; // Toma el valor de 4 si el pixel es RGBA o 3 si es RGB.
 
   // Tomamos la información de los pixeles y los tranformamos en binarios
   let pixels = [];
   for (let i = pixelLength; i < uInt8ClampedArray.length; i += pixelLength) {
-    let valor = uInt8ClampedArray[i - pixelLength];
+    let valor = uInt8ClampedArray[i - pixelLength]; // Solo nos fijamos en la primera coordenada de cada pixel
     valor >= 128 ? pixels.push(1) : pixels.push(0); // Asignamos el valor de 1 si está mas cerca del blanco y 0 si esta más cerca del negro
   }
 
@@ -79,6 +80,6 @@ const toEpaper = (uInt8ClampedArray, setValue) => {
     if (i !== binario.length - 2) cArray += ',';
   }
 
-  // Se modifica estado
+  // Se modifica estado con cadena para Epaper
   setValue(cArray);
 }
