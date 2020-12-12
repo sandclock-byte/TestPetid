@@ -1,6 +1,28 @@
-import React from 'react'
-import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
+import React from 'react';
+import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
+import ImagePicker from 'react-native-image-crop-picker';
 
+const takePhoto = () => {
+    ImagePicker.openCamera({
+        width: 200,
+        height: 200,
+        cropping: true,
+        useFrontCamera: true,
+        includeBase64: true,
+        hideBottomControls: true,
+    }).then(image => {
+        console.log(image.data);
+    });
+}
+const choosePhoto = () => {
+    ImagePicker.openPicker({
+        width: 200,
+        height: 200,
+        cropping: true
+    }).then(image => {
+        console.log(image);
+    });
+}
 export default function Imagen() {
     return (
         <>
@@ -10,17 +32,17 @@ export default function Imagen() {
                 <Text style={styles.text}>Selecciona una Imagen</Text>
             </View>
 
-            <View style={styles.viewButtonCamera}>
-                <TouchableOpacity onPress={() => { }}>
-                    <View style={styles.cameraButton}>
+            <View style={styles.viewButtons}>
+                <TouchableOpacity onPress={takePhoto}>
+                    <View style={styles.actionButton}>
                         <Image
                             source={require('../assets/Imagen/cameraIcon.png')}
                         />
                     </View>
                 </TouchableOpacity>
-            
-                <TouchableOpacity onPress={() => { }}>
-                    <View style={styles.cameraButton}>
+
+                <TouchableOpacity onPress={choosePhoto}>
+                    <View style={styles.actionButton}>
                         <Image
                             source={require('../assets/Imagen/galleryIcon.png')}
                         />
@@ -44,7 +66,7 @@ const styles = StyleSheet.create({
         fontSize: 22,
     },
 
-    viewButtonCamera: {
+    viewButtons: {
         flexDirection: 'row',
         marginHorizontal: 0,
         alignItems: 'center',
@@ -53,7 +75,7 @@ const styles = StyleSheet.create({
         bottom: 55, width: '100%',
     },
 
-    cameraButton: {
+    actionButton: {
         marginBottom: 40,
         backgroundColor: '#33415c',
         borderRadius: 20,
