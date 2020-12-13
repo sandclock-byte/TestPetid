@@ -10,6 +10,7 @@ const takePhoto = () => {
         useFrontCamera: true,
         includeBase64: true,
         hideBottomControls: true,
+
     }).then(image => {
         console.log(image.data);
     });
