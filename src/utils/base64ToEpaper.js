@@ -1,6 +1,9 @@
 import PNGReader from '../utils/png';
 import ImageResizer from 'react-native-image-resizer';
 import ImgToBase64 from 'react-native-image-base64';
+const Buffer = require('buffer').Buffer;
+global.Buffer = Buffer; // very important
+const jpeg = require('jpeg-js');
 
 /* 
      * Función que genera imagen en formato "Epaper" con base64 de PNG 
@@ -14,7 +17,7 @@ import ImgToBase64 from 'react-native-image-base64';
      */
 
 /** Método que se exporta, hace mención de los demás métodos para ejecutar el proceso */
-export async function base64toEpaper(base64, setValue) {
+export async function base64PNGtoEpaper(base64, setValue) {
 
   /** Aquí tomamos el base64 de una Imagen, se redimesiona a 200x200px y se obtiene la uri */
   let uri = await ImageResizer.createResizedImage(base64, 200, 200, 'PNG', 100)
@@ -55,6 +58,7 @@ const binToHex = (bin) => {
 }
 
 /** Método que toma la información de pixeles y modifica estado con el formato Epaper. */
+// const toEpaper = (uInt8ClampedArray, setValue) => {
 const toEpaper = (uInt8ClampedArray, setValue) => {
 
   // Esta constante nos sirve para identificar si la información del Pixel es RGBA o RGB
@@ -82,4 +86,10 @@ const toEpaper = (uInt8ClampedArray, setValue) => {
 
   // Se modifica estado con cadena para Epaper
   setValue(cArray);
+}
+
+export const base64JPGtoEpaper = (base64) => {
+  const jpegData = Buffer.from(base64, 'base64');
+  let uInt8ClampedArray = jpeg.decode(jpegData).data;
+  console.log(uInt8ClampedArray);
 }

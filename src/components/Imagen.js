@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
+import { base64JPGtoEpaper } from '../utils/base64ToEpaper';
 
 const takePhoto = (setBase64Image) => {
     ImagePicker.openCamera({
@@ -10,7 +11,7 @@ const takePhoto = (setBase64Image) => {
         includeBase64: true,
         hideBottomControls: true,
     }).then(image => {
-        setBase64Image(image.data);
+        base64JPGtoEpaper(image.data);
     });
 }
 
@@ -22,7 +23,7 @@ const choosePhoto = (setBase64Image) => {
         includeBase64: true,
         hideBottomControls: true,
     }).then(image => {
-        setBase64Image(image.data);
+        base64JPGtoEpaper(image.data);
     });
 }
 
