@@ -4,7 +4,7 @@ import ImgToBase64 from 'react-native-image-base64';
 const Buffer = require('buffer').Buffer;
 global.Buffer = Buffer; // very important
 const jpeg = require('jpeg-js');
-var floydSteinberg = require('floyd-steinberg');
+
 
 /* 
      * Función que genera imagen en formato "Epaper" con base64 de PNG 
