@@ -2,6 +2,30 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 
+const takePhoto = (setBase64Image) => {
+    ImagePicker.openCamera({
+        width: 200,
+        height: 200,
+        cropping: true,
+        includeBase64: true,
+        hideBottomControls: true,
+    }).then(image => {
+        setBase64Image(image.data);
+    });
+}
+
+const choosePhoto = (setBase64Image) => {
+    ImagePicker.openPicker({
+        width: 200,
+        height: 200,
+        cropping: true,
+        includeBase64: true,
+        hideBottomControls: true,
+    }).then(image => {
+        setBase64Image(image.data);
+    });
+}
+
 export default function Imagen() {
     const [base64Image, setBase64Image] = useState('');
 
@@ -40,28 +64,6 @@ export default function Imagen() {
     )
 }
 
-const takePhoto = (setBase64Image) => {
-    ImagePicker.openCamera({
-        width: 200,
-        height: 200,
-        cropping: true,
-        includeBase64: true,
-        hideBottomControls: true,
-    }).then(image => {
-        setBase64Image(image.data);
-    });
-}
-const choosePhoto = (setBase64Image) => {
-    ImagePicker.openPicker({
-        width: 200,
-        height: 200,
-        cropping: true,
-        includeBase64: true,
-        hideBottomControls: true,
-    }).then(image => {
-        setBase64Image(image.data);
-    });
-}
 
 const styles = StyleSheet.create({
     content: {
