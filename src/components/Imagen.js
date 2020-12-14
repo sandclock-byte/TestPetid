@@ -1,30 +1,15 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 
-const takePhoto = () => {
-    ImagePicker.openCamera({
-        width: 200,
-        height: 200,
-        cropping: true,
-        includeBase64: true,
-        hideBottomControls: true,
-    }).then(image => {
-        console.log(image.data);
-    });
-}
-const choosePhoto = () => {
-    ImagePicker.openPicker({
-        width: 200,
-        height: 200,
-        cropping: true,
-        includeBase64: true,
-        hideBottomControls: true,
-    }).then(image => {
-        console.log(image.data);
-    });
-}
 export default function Imagen() {
+    const [base64Image, setBase64Image] = useState('');
+
+    useEffect(() => {
+        if (base64Image === '') return;
+        console.log(base64Image);
+    }, [base64Image])
+
     return (
         <>
             <View style={styles.content}>
@@ -34,7 +19,7 @@ export default function Imagen() {
             </View>
 
             <View style={styles.viewButtons}>
-                <TouchableOpacity onPress={takePhoto}>
+                <TouchableOpacity onPress={() => takePhoto(setBase64Image)}>
                     <View style={styles.actionButton}>
                         <Image
                             source={require('../assets/Imagen/cameraIcon.png')}
@@ -42,7 +27,7 @@ export default function Imagen() {
                     </View>
                 </TouchableOpacity>
 
-                <TouchableOpacity onPress={choosePhoto}>
+                <TouchableOpacity onPress={() => choosePhoto(setBase64Image)}>
                     <View style={styles.actionButton}>
                         <Image
                             source={require('../assets/Imagen/galleryIcon.png')}
@@ -53,6 +38,29 @@ export default function Imagen() {
 
         </>
     )
+}
+
+const takePhoto = (setBase64Image) => {
+    ImagePicker.openCamera({
+        width: 200,
+        height: 200,
+        cropping: true,
+        includeBase64: true,
+        hideBottomControls: true,
+    }).then(image => {
+        setBase64Image(image.data);
+    });
+}
+const choosePhoto = (setBase64Image) => {
+    ImagePicker.openPicker({
+        width: 200,
+        height: 200,
+        cropping: true,
+        includeBase64: true,
+        hideBottomControls: true,
+    }).then(image => {
+        setBase64Image(image.data);
+    });
 }
 
 const styles = StyleSheet.create({
