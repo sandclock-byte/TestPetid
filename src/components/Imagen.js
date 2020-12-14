@@ -7,10 +7,8 @@ const takePhoto = () => {
         width: 200,
         height: 200,
         cropping: true,
-        useFrontCamera: true,
         includeBase64: true,
         hideBottomControls: true,
-
     }).then(image => {
         console.log(image.data);
     });
@@ -19,9 +17,11 @@ const choosePhoto = () => {
     ImagePicker.openPicker({
         width: 200,
         height: 200,
-        cropping: true
+        cropping: true,
+        includeBase64: true,
+        hideBottomControls: true,
     }).then(image => {
-        console.log(image);
+        console.log(image.data);
     });
 }
 export default function Imagen() {
