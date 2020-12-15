@@ -119,41 +119,43 @@ const toEpaper2 = (uInt8ClampedArray) => {
 
 export const base64JPGtoEpaper = (base64) => {
   const jpegData = Buffer.from(base64, 'base64');
+
   let uInt8ClampedArray = jpeg.decode(jpegData).data;
-  // console.log(uInt8ClampedArray);
-  let ditherImage = floyd_steinberg(uInt8ClampedArray);
+
+  let ditherImage = floydSteinberg(uInt8ClampedArray);
   toEpaper2(ditherImage);
+
 }
 
-function floyd_steinberg(data) {
-    var imageData = data;
-    var imageDataLength = imageData.length;
-    var w = 200;
-    var lumR = [],
-        lumG = [],
-        lumB = [];
-    var newPixel, err;
+const floydSteinberg = (data) => {
+  let imageData = data;
+  let imageDataLength = imageData.length;
+  let imageWidth = 200;
+  let lumR = [],
+    lumG = [],
+    lumB = [];
+  let newPixel, err;
 
-    for (var i = 0; i < 256; i++) {
-      lumR[i] = i * 0.299;
-      lumG[i] = i * 0.587;
-      lumB[i] = i * 0.110;
-    }
-
-    for (var i = 0; i <= imageDataLength; i += 4) {
-      imageData[i] = Math.floor(lumR[imageData[i]] + lumG[imageData[i + 1]] + lumB[imageData[i + 2]]);
-    }
-
-    for (var currentPixel = 0; currentPixel <= imageDataLength; currentPixel += 4) {
-      newPixel = imageData[currentPixel] < 150 ? 0 : 255;
-      err = Math.floor((imageData[currentPixel] - newPixel) / 23);
-      imageData[currentPixel + 0 * 1 - 0] = newPixel;
-      imageData[currentPixel + 4 * 1 - 0] += err * 7;
-      imageData[currentPixel + 4 * w - 4] += err * 3;
-      imageData[currentPixel + 4 * w - 0] += err * 5;
-      imageData[currentPixel + 4 * w + 4] += err * 1;
-      imageData[currentPixel + 1] = imageData[currentPixel + 2] = imageData[currentPixel];
-    }
-
-    return imageData;
+  for (let i = 0; i < 256; i++) {
+    lumR[i] = i * 0.299;
+    lumG[i] = i * 0.587;
+    lumB[i] = i * 0.110;
   }
+
+  for (let i = 0; i <= imageDataLength; i += 4) {
+    imageData[i] = Math.floor(lumR[imageData[i]] + lumG[imageData[i + 1]] + lumB[imageData[i + 2]]);
+  }
+
+  for (let currentPixel = 0; currentPixel <= imageDataLength; currentPixel += 4) {
+    newPixel = imageData[currentPixel] < 150 ? 0 : 255;
+    err = Math.floor((imageData[currentPixel] - newPixel) / 23);
+    imageData[currentPixel + 0 * 1 - 0] = newPixel;
+    imageData[currentPixel + 4 * 1 - 0] += err * 7;
+    imageData[currentPixel + 4 * imageWidth - 4] += err * 3;
+    imageData[currentPixel + 4 * imageWidth - 0] += err * 5;
+    imageData[currentPixel + 4 * imageWidth + 4] += err * 1;
+    imageData[currentPixel + 1] = imageData[currentPixel + 2] = imageData[currentPixel];
+  }
+
+  return imageData;
+}
