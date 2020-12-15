@@ -4,6 +4,7 @@ import ImgToBase64 from 'react-native-image-base64';
 const Buffer = require('buffer').Buffer;
 global.Buffer = Buffer; // very important
 const jpeg = require('jpeg-js');
+import { createFromRGBAArray } from 'png-pong';
 
 
 /* 
@@ -123,7 +124,15 @@ export const base64JPGtoEpaper = (base64) => {
   let uInt8ClampedArray = jpeg.decode(jpegData).data;
 
   let ditherImage = floydSteinberg(uInt8ClampedArray);
-  toEpaper2(ditherImage);
+  // toEpaper2(ditherImage);
+
+  let uInt8Array = createFromRGBAArray(200, 200, ditherImage);
+  console.log(uInt8Array);
+
+  let buffer = arrayBufferToBase64(uInt8Array);
+
+  console.log(buffer);
+
 
 }
 
@@ -159,3 +168,13 @@ const floydSteinberg = (data) => {
 
   return imageData;
 }
+
+const arrayBufferToBase64 = buffer => {
+  let binary = '';
+  let bytes = new Uint8Array(buffer);
+  let len = bytes.byteLength;
+  for (let i = 0; i < len; i++) {
+    binary += String.fromCharCode(bytes[i]);
+  }
+  return window.btoa(binary);
+};
