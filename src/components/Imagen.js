@@ -3,37 +3,52 @@ import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 import { base64JPGtoEpaper } from '../utils/base64ToEpaper';
 
-const takePhoto = (setBase64Image) => {
-    ImagePicker.openCamera({
-        width: 200,
-        height: 200,
-        cropping: true,
-        includeBase64: true,
-        hideBottomControls: true,
-    }).then(image => {
-        base64JPGtoEpaper(image.data);
-    });
-}
-
-const choosePhoto = (setBase64Image) => {
-    ImagePicker.openPicker({
-        width: 200,
-        height: 200,
-        cropping: true,
-        includeBase64: true,
-        hideBottomControls: true,
-    }).then(image => {
-        base64JPGtoEpaper(image.data);
-    });
-}
-
 export default function Imagen() {
     const [base64Image, setBase64Image] = useState('');
+    const [cArray, setCArray] = useState('');
+    const [showImg, setShowImg] = useState(defaultImg());
 
-    useEffect(() => {
-        if (base64Image === '') return;
-        console.log(base64Image);
-    }, [base64Image])
+    const takePhoto = () => {
+        ImagePicker.openCamera({
+            width: 200,
+            height: 200,
+            cropping: true,
+            includeBase64: true,
+            hideBottomControls: true,
+        }).then(image => {
+            const base64 = base64JPGtoEpaper(image.data, setCArray);
+            setBase64Image(base64);
+            setShowImg(updateImg());
+            console.log(base64Image);
+        });
+    }
+    
+    const choosePhoto = () => {
+        ImagePicker.openPicker({
+            width: 200,
+            height: 200,
+            cropping: true,
+            includeBase64: true,
+            hideBottomControls: true,
+        }).then(image => {
+            const base64 = base64JPGtoEpaper(image.data, setCArray);
+            setBase64Image(base64);
+            setShowImg(updateImg(base64));
+        });
+    }
+
+    const updateImg = () => {
+        if (base64Image != '') {
+            return (
+                <Image
+                    source={{ uri: base64Image }}
+                />
+            );
+        }
+        else {
+            return defaultImg();
+        }
+    }
 
     return (
         <>
@@ -43,8 +58,10 @@ export default function Imagen() {
                 <Text style={styles.text}>Selecciona una Imagen</Text>
             </View>
 
+            {showImg}
+
             <View style={styles.viewButtons}>
-                <TouchableOpacity onPress={() => takePhoto(setBase64Image)}>
+                <TouchableOpacity onPress={() => takePhoto(setCArray, setBase64Image)}>
                     <View style={styles.actionButton}>
                         <Image
                             source={require('../assets/Imagen/cameraIcon.png')}
@@ -52,7 +69,7 @@ export default function Imagen() {
                     </View>
                 </TouchableOpacity>
 
-                <TouchableOpacity onPress={() => choosePhoto(setBase64Image)}>
+                <TouchableOpacity onPress={() => choosePhoto(setCArray, setBase64Image)}>
                     <View style={styles.actionButton}>
                         <Image
                             source={require('../assets/Imagen/galleryIcon.png')}
@@ -65,6 +82,11 @@ export default function Imagen() {
     )
 }
 
+const defaultImg = () => {
+    return (
+        <View></View>
+    )
+}
 
 const styles = StyleSheet.create({
     content: {

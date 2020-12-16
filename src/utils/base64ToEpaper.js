@@ -89,51 +89,15 @@ const toEpaper = (uInt8ClampedArray, setValue) => {
   // Se modifica estado con cadena para Epaper
   setValue(cArray);
 }
-const toEpaper2 = (uInt8ClampedArray) => {
 
-  // Esta constante nos sirve para identificar si la información del Pixel es RGBA o RGB
-  const pixelLength = uInt8ClampedArray.length / 40000; // Toma el valor de 4 si el pixel es RGBA o 3 si es RGB.
-
-  // Tomamos la información de los pixeles y los tranformamos en binarios
-  let pixels = [];
-  for (let i = pixelLength; i < uInt8ClampedArray.length; i += pixelLength) {
-    let valor = uInt8ClampedArray[i - pixelLength]; // Solo nos fijamos en la primera coordenada de cada pixel
-    valor >= 128 ? pixels.push(1) : pixels.push(0); // Asignamos el valor de 1 si está mas cerca del blanco y 0 si esta más cerca del negro
-  }
-
-  // Se juntan los binarios en grupos de 4
-  let binario = [];
-  for (let i = 4; i < pixels.length; i += 4) {
-    binario.push(pixels.slice(i - 4, i));
-  }
-
-  // Se Genera la cadena con el formato para Epaper
-  let cArray = '';
-  for (let i = 1; i < binario.length; i += 2) {
-    cArray += `0x${binToHex(binario[i - 1]) + binToHex(binario[i])}`;
-    if (i !== binario.length - 2) cArray += ',';
-  }
-
-  // Se modifica estado con cadena para Epaper
-  console.log(cArray);
-}
-
-export const base64JPGtoEpaper = (base64) => {
+export const base64JPGtoEpaper = (base64, setValue) => {
   const jpegData = Buffer.from(base64, 'base64');
-
   let uInt8ClampedArray = jpeg.decode(jpegData).data;
-
   let ditherImage = floydSteinberg(uInt8ClampedArray);
-  // toEpaper2(ditherImage);
-
   let uInt8Array = createFromRGBAArray(200, 200, ditherImage);
-  console.log(uInt8Array);
-
-  let buffer = arrayBufferToBase64(uInt8Array);
-
-  console.log(buffer);
-
-
+  
+  toEpaper(ditherImage, setValue);
+  return `data:image/png;base64,${arrayBufferToBase64(uInt8Array)}`;
 }
 
 const floydSteinberg = (data) => {
