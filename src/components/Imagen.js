@@ -3,49 +3,50 @@ import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 import { base64JPGtoEpaper } from '../utils/base64ToEpaper';
 
+const croperOptions = {
+    width: 200,
+    height: 200,
+    cropping: true,
+    includeBase64: true,
+    hideBottomControls: true,
+}
+
 export default function Imagen() {
     const [base64, setBase64Image] = useState('');
     const [cArray, setCArray] = useState('');
     const [showImg, setShowImg] = useState(defaultImg());
 
     const takePhoto = () => {
-        ImagePicker.openCamera({
-            width: 200,
-            height: 200,
-            cropping: true,
-            includeBase64: true,
-            hideBottomControls: true,
-        }).then(image => {
+        ImagePicker.openCamera(croperOptions).then(image => {
             const base64 = base64JPGtoEpaper(image.data, setCArray);
             setBase64Image(base64);
-            setShowImg(updateImg(base64));
+            setShowImg(updateImg(base64, cArray));
         });
     }
 
     const choosePhoto = () => {
-        ImagePicker.openPicker({
-            width: 200,
-            height: 200,
-            cropping: true,
-            includeBase64: true,
-            hideBottomControls: true,
-        }).then(image => {
+        ImagePicker.openPicker(croperOptions).then(image => {
             const base64 = base64JPGtoEpaper(image.data, setCArray);
             setBase64Image(base64);
-            setShowImg(updateImg(base64));
+            setShowImg(updateImg(base64, cArray));
         });
+    }
+
+    const sendImage = () => {
+        console.log(cArray);
+        setCArray('');
     }
 
     const updateImg = (base64) => {
         if (base64 != '') {
             return (
                 <View style={styles.preViewContent}>
-                    <TouchableOpacity onPress={() => { }}>
+                    <TouchableOpacity onPress={() => {sendImage()}}>
                         <View style={styles.viewButton}>
                             <Text style={styles.textButton} >Envíar</Text>
                         </View>
                     </TouchableOpacity>
-
+    
                     <Image
                         style={styles.preViewImage}
                         source={{
