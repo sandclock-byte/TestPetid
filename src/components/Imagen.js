@@ -118,7 +118,9 @@ const styles = StyleSheet.create({
     },
 
     preViewContent: {
-        alignItems: 'center'
+        height: '64%',
+        alignItems:'center',
+        justifyContent: 'center',
     },
 
     textButton: {
@@ -128,7 +130,7 @@ const styles = StyleSheet.create({
     },
 
     viewButton: {
-        marginVertical: 20,
+        marginBottom: '15%',
         backgroundColor: '#33415c',
         borderRadius: 50,
         paddingVertical: 10,
