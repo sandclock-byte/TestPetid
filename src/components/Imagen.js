@@ -10,11 +10,17 @@ const croperOptions = {
     includeBase64: true,
     hideBottomControls: true,
 }
+let imagenCArray;
 
 export default function Imagen() {
     const [base64, setBase64Image] = useState('');
     const [cArray, setCArray] = useState('');
     const [showImg, setShowImg] = useState(defaultImg());
+
+
+    useEffect(() => {
+        imagenCArray = cArray;
+    }, [cArray])
 
     const takePhoto = () => {
         ImagePicker.openCamera(croperOptions).then(image => {
@@ -33,8 +39,7 @@ export default function Imagen() {
     }
 
     const sendImage = () => {
-        console.log(cArray);
-        setCArray('');
+        console.log(imagenCArray);
     }
 
     const updateImg = (base64) => {
