@@ -5,6 +5,7 @@ const Buffer = require('buffer').Buffer;
 global.Buffer = Buffer; // very important
 const jpeg = require('jpeg-js');
 import { createFromRGBAArray } from 'png-pong';
+import { epaperFilter } from './epaperFilter';
 
 
 /* 
@@ -70,7 +71,7 @@ const toEpaper = (uInt8ClampedArray, setValue) => {
   let pixels = [];
   for (let i = pixelLength; i < uInt8ClampedArray.length; i += pixelLength) {
     let valor = uInt8ClampedArray[i - pixelLength]; // Solo nos fijamos en la primera coordenada de cada pixel
-    valor >= 128 ? pixels.push(1) : pixels.push(0); // Asignamos el valor de 1 si está mas cerca del blanco y 0 si esta más cerca del negro
+    valor < 127 ? pixels.push(0) : pixels.push(1); // Asignamos el valor de 0 si esta más cerca del negro y 1 si está mas cerca del blanco
   }
 
   // Se juntan los binarios en grupos de 4
@@ -93,44 +94,11 @@ const toEpaper = (uInt8ClampedArray, setValue) => {
 export const base64JPGtoEpaper = (base64, setValue) => {
   const jpegData = Buffer.from(base64, 'base64');
   let uInt8ClampedArray = jpeg.decode(jpegData).data;
-  let ditherImage = floydSteinberg(uInt8ClampedArray);
-  let uInt8Array = createFromRGBAArray(200, 200, ditherImage);
-  
-  toEpaper(ditherImage, setValue);
+  epaperFilter(uInt8ClampedArray);
+  let uInt8Array = createFromRGBAArray(200, 200, uInt8ClampedArray);
+
+  toEpaper(uInt8ClampedArray, setValue);
   return `data:image/png;base64,${arrayBufferToBase64(uInt8Array)}`;
-}
-
-const floydSteinberg = (data) => {
-  let imageData = data;
-  let imageDataLength = imageData.length;
-  let imageWidth = 200;
-  let lumR = [],
-    lumG = [],
-    lumB = [];
-  let newPixel, err;
-
-  for (let i = 0; i < 256; i++) {
-    lumR[i] = i * 0.299;
-    lumG[i] = i * 0.587;
-    lumB[i] = i * 0.110;
-  }
-
-  for (let i = 0; i <= imageDataLength; i += 4) {
-    imageData[i] = Math.floor(lumR[imageData[i]] + lumG[imageData[i + 1]] + lumB[imageData[i + 2]]);
-  }
-
-  for (let currentPixel = 0; currentPixel <= imageDataLength; currentPixel += 4) {
-    newPixel = imageData[currentPixel] < 150 ? 0 : 255;
-    err = Math.floor((imageData[currentPixel] - newPixel) / 23);
-    imageData[currentPixel + 0 * 1 - 0] = newPixel;
-    imageData[currentPixel + 4 * 1 - 0] += err * 7;
-    imageData[currentPixel + 4 * imageWidth - 4] += err * 3;
-    imageData[currentPixel + 4 * imageWidth - 0] += err * 5;
-    imageData[currentPixel + 4 * imageWidth + 4] += err * 1;
-    imageData[currentPixel + 1] = imageData[currentPixel + 2] = imageData[currentPixel];
-  }
-
-  return imageData;
 }
 
 const arrayBufferToBase64 = buffer => {
