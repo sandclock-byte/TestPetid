@@ -1,71 +1,56 @@
 import PNGReader from '../utils/png';
 import ImageResizer from 'react-native-image-resizer';
 import ImgToBase64 from 'react-native-image-base64';
+const Buffer = require('buffer').Buffer;
+global.Buffer = Buffer; // very important
+const jpeg = require('jpeg-js');
+import { createFromRGBAArray } from 'png-pong';
+import { epaperFilter } from './epaperFilter';
+
 
 /* 
      * Función que genera imagen en formato "Epaper" con base64 de PNG 
-     * y modifica estado para desplegarlo
+     * y modifica un estado para envíarlo
      * 
      * @param { base64 } "Información de imagen en base64"
-     * @param { setCArray } "Función que modifica estado"
+     * @param { setValue } "Función que modifica estado"
      *
      * @author   Fernando Bernal Díaz (fernando.bernal@ditems.com)
      * @license  DITEMS
      */
 
-/** Variable dónde se van a guardar los pixeles en RGBA */
-let uInt8ClampedArray = [];
-
 /** Método que se exporta, hace mención de los demás métodos para ejecutar el proceso */
-export async function base64toEpaper(base64, setCArray) {
+export async function base64PNGtoEpaper(base64, setValue) {
 
   /** Aquí tomamos el base64 de una Imagen, se redimesiona a 200x200px y se obtiene la uri */
-  let uri;
-  ImageResizer.createResizedImage(base64, 200, 200, 'PNG', 100)
+  let uri = await ImageResizer.createResizedImage(base64, 200, 200, 'PNG', 100)
     .then(response => {
-      uri = response.uri;
-    })
+      return response.uri;
+    });
 
-  /** Damos un retraso de 10ms para esperar que la promesa asigne valor a uri */
-  await delay(10);
-  
   /** Se toma la uri y se obtiene base64 de imagen redimensionada */
-  let base64Resized;
-  ImgToBase64.getBase64String(uri)
-  .then(base64String => base64Resized = base64String);
-  
-  /** Damos un retraso de 10ms para esperar que la promesa asigne valor a base64Resized */
-  await delay(10);
-  
-  /** Se asigna en uInt8ClampedArray los valores de los pixeles en RGBA */
-  base64ToUInt8ClampedArray(base64Resized)
-  
-  /** Damos un retraso de 10ms para esperar que la promesa asigne valor a uInt8ClampedArray */
-  await delay(10);
+  let base64Resized = await ImgToBase64.getBase64String(uri)
+    .then(base64String => {
+      return base64String
+    });
 
-  /** Se pasan la información de los Pixeles y se asigna a estado el formato para Epaper*/
-  toEpaper(uInt8ClampedArray, setCArray);
+  /** Se asigna en uInt8ClampedArray los valores de los pixeles puede ser en RGB o RGBA depende del móvil */
+  base64ToUInt8ClampedArray(base64Resized, uInt8ClampedArray => {
+    /** Se pasa la información de los Pixeles y se asigna a estado el formato para Epaper*/
+    toEpaper(uInt8ClampedArray, setValue);
+  });
 }
 
 /** Método que se encarga de obtener la información de pixeles del base64 de Imagen */
-function base64ToUInt8ClampedArray(base64) {
+function base64ToUInt8ClampedArray(base64, callback) {
   const pngBytes = atob(base64);
   const reader = new PNGReader(pngBytes);
-
   reader.parse((err, png) => {
-    if (err) {
-      console.error(err)
-      return
-    }
-    uInt8ClampedArray = (png.pixels);
-  })
+    callback(png.pixels);
+  });
 }
 
-/** Método que nos permite hacer un retraso en Ms */
-const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
-
-
-/** Método que tranforma binarios en Hexadecimales */
+/** Método que transforma binarios en Hexadecimales */
 const hexadecimales = [...'0123456789abcdef'];
 const binToHex = (bin) => {
   let posicionChar = 0;
@@ -76,15 +61,17 @@ const binToHex = (bin) => {
 }
 
 /** Método que toma la información de pixeles y modifica estado con el formato Epaper. */
-const toEpaper = (uInt8ClampedArray, setCArray) => {
-  
+// const toEpaper = (uInt8ClampedArray, setValue) => {
+const toEpaper = (uInt8ClampedArray, setValue) => {
+
+  // Esta constante nos sirve para identificar si la información del Pixel es RGBA o RGB
+  const pixelLength = uInt8ClampedArray.length / 40000; // Toma el valor de 4 si el pixel es RGBA o 3 si es RGB.
+
   // Tomamos la información de los pixeles y los tranformamos en binarios
   let pixels = [];
-  for (let i = 4; i < uInt8ClampedArray.length; i += 4) {
-    let arr = uInt8ClampedArray.slice(i - 4, i); // Agrupamos en 4 porque el pixel está en RGBA
-    let valor = arr[0];
-    valor >= 128 ? valor = 1 : valor = 0; // Asignamos el valor de 1 si está mas cerca del blanco y 0 si esta más cerca del negro
-    pixels.push(valor);
+  for (let i = pixelLength; i < uInt8ClampedArray.length; i += pixelLength) {
+    let valor = uInt8ClampedArray[i - pixelLength]; // Solo nos fijamos en la primera coordenada de cada pixel
+    valor < 127 ? pixels.push(0) : pixels.push(1); // Asignamos el valor de 0 si esta más cerca del negro y 1 si está mas cerca del blanco
   }
 
   // Se juntan los binarios en grupos de 4
@@ -100,6 +87,26 @@ const toEpaper = (uInt8ClampedArray, setCArray) => {
     if (i !== binario.length - 2) cArray += ',';
   }
 
-  // Se modifica estado
-  setCArray(cArray);
+  // Se modifica estado con cadena para Epaper
+  setValue(cArray);
 }
+
+export const base64JPGtoEpaper = (base64, setValue) => {
+  const jpegData = Buffer.from(base64, 'base64');
+  let uInt8ClampedArray = jpeg.decode(jpegData).data;
+  epaperFilter(uInt8ClampedArray);
+  let uInt8Array = createFromRGBAArray(200, 200, uInt8ClampedArray);
+
+  toEpaper(uInt8ClampedArray, setValue);
+  return `data:image/png;base64,${arrayBufferToBase64(uInt8Array)}`;
+}
+
+const arrayBufferToBase64 = buffer => {
+  let binary = '';
+  let bytes = new Uint8Array(buffer);
+  let len = bytes.byteLength;
+  for (let i = 0; i < len; i++) {
+    binary += String.fromCharCode(bytes[i]);
+  }
+  return window.btoa(binary);
+};
