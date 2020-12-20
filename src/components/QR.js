@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, NativeModules } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
-import { base64toEpaper } from '../utils/base64ToEpaper';
+import { base64PNGtoEpaper } from '../utils/base64ToEpaper';
 
 
 
@@ -26,7 +26,7 @@ export default function QR() {
     }
 
     const enviarQR = () => {
-        base64toEpaper(qrBase64, setCArray);
+        base64PNGtoEpaper(qrBase64, setCArray);
     }
 
     if (qrSvg != null) {
@@ -131,9 +131,9 @@ const styles = StyleSheet.create({
     actions: {
         width: '100%',
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        justifyContent: 'space-evenly',
         alignItems: 'center',
-        paddingHorizontal: 70,
+        paddingHorizontal: 10,
     },
 
     button: {
