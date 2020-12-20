@@ -1,6 +1,12 @@
 import PNGReader from '../utils/png';
 import ImageResizer from 'react-native-image-resizer';
 import ImgToBase64 from 'react-native-image-base64';
+const Buffer = require('buffer').Buffer;
+global.Buffer = Buffer; // very important
+const jpeg = require('jpeg-js');
+import { createFromRGBAArray } from 'png-pong';
+import { epaperFilter } from './epaperFilter';
+
 
 /* 
      * Función que genera imagen en formato "Epaper" con base64 de PNG 
@@ -14,7 +20,7 @@ import ImgToBase64 from 'react-native-image-base64';
      */
 
 /** Método que se exporta, hace mención de los demás métodos para ejecutar el proceso */
-export async function base64toEpaper(base64, setValue) {
+export async function base64PNGtoEpaper(base64, setValue) {
 
   /** Aquí tomamos el base64 de una Imagen, se redimesiona a 200x200px y se obtiene la uri */
   let uri = await ImageResizer.createResizedImage(base64, 200, 200, 'PNG', 100)
@@ -55,6 +61,7 @@ const binToHex = (bin) => {
 }
 
 /** Método que toma la información de pixeles y modifica estado con el formato Epaper. */
+// const toEpaper = (uInt8ClampedArray, setValue) => {
 const toEpaper = (uInt8ClampedArray, setValue) => {
 
   // Esta constante nos sirve para identificar si la información del Pixel es RGBA o RGB
@@ -64,7 +71,7 @@ const toEpaper = (uInt8ClampedArray, setValue) => {
   let pixels = [];
   for (let i = pixelLength; i < uInt8ClampedArray.length; i += pixelLength) {
     let valor = uInt8ClampedArray[i - pixelLength]; // Solo nos fijamos en la primera coordenada de cada pixel
-    valor >= 128 ? pixels.push(1) : pixels.push(0); // Asignamos el valor de 1 si está mas cerca del blanco y 0 si esta más cerca del negro
+    valor < 127 ? pixels.push(0) : pixels.push(1); // Asignamos el valor de 0 si esta más cerca del negro y 1 si está mas cerca del blanco
   }
 
   // Se juntan los binarios en grupos de 4
@@ -83,3 +90,23 @@ const toEpaper = (uInt8ClampedArray, setValue) => {
   // Se modifica estado con cadena para Epaper
   setValue(cArray);
 }
+
+export const base64JPGtoEpaper = (base64, setValue) => {
+  const jpegData = Buffer.from(base64, 'base64');
+  let uInt8ClampedArray = jpeg.decode(jpegData).data;
+  epaperFilter(uInt8ClampedArray);
+  let uInt8Array = createFromRGBAArray(200, 200, uInt8ClampedArray);
+
+  toEpaper(uInt8ClampedArray, setValue);
+  return `data:image/png;base64,${arrayBufferToBase64(uInt8Array)}`;
+}
+
+const arrayBufferToBase64 = buffer => {
+  let binary = '';
+  let bytes = new Uint8Array(buffer);
+  let len = bytes.byteLength;
+  for (let i = 0; i < len; i++) {
+    binary += String.fromCharCode(bytes[i]);
+  }
+  return window.btoa(binary);
+};
