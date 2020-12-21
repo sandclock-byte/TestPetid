@@ -1,10 +1,28 @@
 
+/**
+ * Función que aplica filtro para Epaper a pixelData.
+ * @param {pixelData} data 
+ * @author Fernando Bernal Díaz (fernando.bernal@ditems.com)
+ * @license DITEMS
+ */
 export const epaperFilter = (data) => {
     toGrayScale(data);
     floydSteinberg(data);
     toMonochrome(data);
 }
 
+/** Filtro Escala de Grises */
+const toGrayScale = (data) => {
+    for (let i = 0; i < data.length; i += 4) {
+        let gray = (data[i] + data[i + 1] + data[i + 2]) / 3;
+        data[i] = gray;
+        data[i + 1] = gray;
+        data[i + 2] = gray;
+    }
+}
+
+/** Filtro Floyd-Steinberg */
+// =========================================================================================================================
 const floydSteinberg = (data) => {
 
     let oldpixel;
@@ -68,19 +86,12 @@ const get_pixel = (x, y, data) => {
     return [data[index + 0], data[index + 1], data[index + 2]];
 }
 
-const toGrayScale = (data) => {
-    for (let i = 0; i < data.length; i += 4) {
-        let gray = (data[i] + data[i + 1] + data[i + 2]) / 3;
-        data[i] = gray;
-        data[i + 1] = gray;
-        data[i + 2] = gray;
-    }
-}
+// =========================================================================================================================
 
+/**Filtro Monocromatico */
 const toMonochrome = (data) => {
     for (let i = 0; i <= data.length; i += 4) {
         data[i] = data[i] < 127 ? 0 : 255;
         data[i + 1] = data[i + 2] = data[i];
     }
 }
-
