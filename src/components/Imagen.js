@@ -46,12 +46,12 @@ export default function Imagen() {
         if (base64 != '') {
             return (
                 <View style={styles.preViewContent}>
-                    <TouchableOpacity onPress={() => {sendImage()}}>
+                    <TouchableOpacity onPress={() => { sendImage() }}>
                         <View style={styles.viewButton}>
                             <Text style={styles.textButton} >Envíar</Text>
                         </View>
                     </TouchableOpacity>
-    
+
                     <Image
                         style={styles.preViewImage}
                         source={{
@@ -80,6 +80,7 @@ export default function Imagen() {
                 <TouchableOpacity onPress={() => takePhoto(setCArray, setBase64Image)}>
                     <View style={styles.actionButton}>
                         <Image
+                            style={styles.imageButtons}
                             source={require('../assets/Imagen/cameraIcon.png')}
                         />
                     </View>
@@ -88,6 +89,7 @@ export default function Imagen() {
                 <TouchableOpacity onPress={() => choosePhoto(setCArray, setBase64Image)}>
                     <View style={styles.actionButton}>
                         <Image
+                            style={styles.imageButtons}
                             source={require('../assets/Imagen/galleryIcon.png')}
                         />
                     </View>
@@ -119,7 +121,7 @@ const styles = StyleSheet.create({
 
     preViewContent: {
         height: '64%',
-        alignItems:'center',
+        alignItems: 'center',
         justifyContent: 'center',
     },
 
@@ -159,5 +161,10 @@ const styles = StyleSheet.create({
         paddingHorizontal: 25,
         alignItems: 'center',
         width: '100%',
+    },
+
+    imageButtons: {
+        height: 50,
+        width: 50,
     },
 })
