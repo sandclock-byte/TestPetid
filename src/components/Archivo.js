@@ -41,10 +41,28 @@ export default function Archivo() {
                     </TouchableOpacity>
                 </View>;
             setShowActions(act);
-            console.log(file.uri);
-            console.log(file.type);
-            console.log(file.name);
-            console.log(file.size);
+            // console.log(file.uri);
+            // console.log(file.type);
+            // console.log(file.name);
+            // console.log(file.size);
+            let type = getFileType(file.name);
+            let deta = 
+            <View style={styles.viewDetails}>
+                <View style={styles.viewContentDetails}>
+                    <View style={styles.viewIconDetails}>
+                        <Image
+                            style={styles.iconDetails}
+                            source={{
+                                uri: getIcon(type)
+                            }}
+                        />
+                    </View>
+                    <Text style={styles.text}>Nombre: {file.name}</Text>
+                    <Text style={styles.text}>Tamaño: {fileSize(file.size)}</Text>
+                </View>
+            </View>;
+
+            setShowDetails(deta);
         }
     }, [file])
 
@@ -57,8 +75,6 @@ export default function Archivo() {
 
             setFile({
                 ...file,
-                uri: res.uri,
-                type: res.type,
                 name: res.name,
                 size: res.size,
                 base64: result,
@@ -87,7 +103,10 @@ export default function Archivo() {
 
         </View>;
 
+    let details = <View></View>;
+
     const [showActions, setShowActions] = useState(actions);
+    const [showDetails, setShowDetails] = useState(details)
 
     const sendFile = () => {
         const tramaArchivo = `*${file.base64}#`
@@ -102,20 +121,7 @@ export default function Archivo() {
                 <Text style={styles.text}>para envíar</Text>
             </View>
 
-            <View style={styles.viewDetails}>
-                <View style={styles.viewContentDetails}>
-                    <View style={styles.viewIconDetails}>
-                        <Image
-                            style={styles.iconDetails}
-                            source={{
-                                uri: getIcon(getFileType('Imagen2.jpg'))
-                            }}
-                        />
-                    </View>
-                    <Text style={styles.text}>Nombre: Imagen2.jpg</Text>
-                    <Text style={styles.text}>Tamaño: {fileSize(10338)}</Text>
-                </View>
-            </View>
+            {showDetails}
 
             {showActions}
 
@@ -126,8 +132,6 @@ export default function Archivo() {
 
 const defaultValue = () => {
     return {
-        uri: '',
-        type: '',
         name: '',
         size: '',
         base64: '',
