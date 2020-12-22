@@ -102,23 +102,11 @@ export default function Archivo() {
                 <Text style={styles.text}>para envíar</Text>
             </View>
 
-            <View style={{
-                height: '68.5%',
-                marginHorizontal: 25,
-                alignItems: 'center',
-                justifyContent: 'center',
-            }}>
-                <View style={{
-                    backgroundColor: '#33415c',
-                    borderRadius: 30,
-                    padding: 20,
-                }}>
-                    <View style={{
-                        alignItems: 'center',
-                        marginBottom: 15,
-                    }}>
+            <View style={styles.viewDetails}>
+                <View style={styles.viewContentDetails}>
+                    <View style={styles.viewIconDetails}>
                         <Image
-                            style={{ height: 80, width: 80 }}
+                            style={styles.iconDetails}
                             source={{
                                 uri: getIcon(getFileType('Imagen2.jpg'))
                             }}
@@ -156,6 +144,29 @@ const styles = StyleSheet.create({
     text: {
         color: '#979DAC',
         fontSize: 22,
+    },
+
+    viewDetails: {
+        height: '68.5%',
+        marginHorizontal: 25,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+
+    viewContentDetails: {
+        backgroundColor: '#33415c',
+        borderRadius: 30,
+        padding: 20,
+    },
+
+    viewIconDetails: {
+        alignItems: 'center',
+        marginBottom: 15,
+    },
+
+    iconDetails: {
+        height: 80,
+        width: 80
     },
 
     viewButtons: {
