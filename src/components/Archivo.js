@@ -6,6 +6,7 @@ import RNFetchBlob from 'rn-fetch-blob';
 export default function Archivo() {
 
     const [file, setFile] = useState(defaultValue());
+    const [fileTram, setFileTram] = useState('');
 
     const chooseAFile = async () => {
         try {
@@ -16,21 +17,13 @@ export default function Archivo() {
 
             setFile({
                 ...file,
-                uri:res.uri,
+                uri: res.uri,
                 type: res.type,
                 name: res.name,
                 size: res.size,
                 base64: result,
             });
 
-            console.log(file);
-
-            // setFile({ ...file, uri: res.uri });
-            // setFile({ ...file, type: res.type }); // mime type
-            // setFile({ ...file, name: res.name });
-            // setFile({ ...file, size: res.size });
-            // setFile({ ...file, base64: result });
-            
         } catch (err) {
             if (DocumentPicker.isCancel(err)) {
                 // User cancelled the picker, exit any dialogs or menus and move on
@@ -38,6 +31,12 @@ export default function Archivo() {
                 throw err;
             }
         }
+    }
+
+    const sendFile = () => {
+        const tramaArchivo = `*${file.base64}#`
+        setFileTram(tramaArchivo);
+        console.log(tramaArchivo);
     }
 
     return (
@@ -57,7 +56,7 @@ export default function Archivo() {
                     </View>
                 </TouchableOpacity>
 
-                <TouchableOpacity onPress={() => { }}>
+                <TouchableOpacity onPress={() => sendFile()}>
                     <View style={styles.actionButton}>
                         <Image
                             style={styles.imageButtons}
@@ -90,6 +89,8 @@ const defaultValue = () => {
         base64: '',
     }
 }
+
+
 
 const styles = StyleSheet.create({
     InstructionsContent: {
