@@ -8,8 +8,12 @@ export const fileSize = (size) => {
             : `${Math.round((size / (1024 * 1024)) * mult) / mult} MB`
 }
 
-export const getIcon = (extension) => {
-    let ext = extension.toUpperCase();
+export const getFileType = (fileName) => {
+    return fileName.split('.').pop();
+}
+
+export const getIcon = (type) => {
+    let ext = type.toUpperCase();
     let fileIcon;
 
     switch (ext) {

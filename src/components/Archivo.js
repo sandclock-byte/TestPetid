@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 import DocumentPicker from 'react-native-document-picker';
 import RNFetchBlob from 'rn-fetch-blob';
-import { fileSize, getIcon } from '../utils/fileUtils'
+import { fileSize, getFileType, getIcon } from '../utils/fileUtils'
 
 export default function Archivo() {
 
@@ -120,7 +120,7 @@ export default function Archivo() {
                         <Image
                             style={{ height: 80, width: 80 }}
                             source={{
-                                uri: getIcon('png')
+                                uri: getIcon(getFileType('Imagen2.jpg'))
                             }}
                         />
                     </View>
