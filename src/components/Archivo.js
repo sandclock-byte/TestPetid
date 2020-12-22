@@ -40,6 +40,10 @@ export default function Archivo() {
                     </TouchableOpacity>
                 </View>;
             setShowActions(act);
+            console.log(file.uri);
+            console.log(file.type);
+            console.log(file.name);
+            console.log(file.size);
         }
     }, [file])
 
@@ -99,25 +103,26 @@ export default function Archivo() {
 
             <View style={{
                 height: '68.5%',
+                marginHorizontal: 25,
                 alignItems: 'center',
                 justifyContent: 'center',
             }}>
                 <View style={{
                     backgroundColor: '#33415c',
                     borderRadius: 30,
-                    padding: 30,
+                    padding: 20,
                 }}>
                     <View style={{
                         alignItems: 'center',
                         marginBottom: 15,
-                        }}>
+                    }}>
                         <Image
-                        style={{height: 80, width: 80}}
+                            style={{ height: 80, width: 80 }}
                             source={require('../assets/Archivo/archivo.png')}
                         />
                     </View>
-                    <Text style={styles.text}>Selecciona un Archivo</Text>
-                    <Text style={styles.text}>para envíar</Text>
+                    <Text style={styles.text}>Nombre: Imagen2.jpg</Text>
+                    <Text style={styles.text}>Tamaño: {fileSize(10338)}</Text>
                 </View>
             </View>
 
@@ -136,6 +141,15 @@ const defaultValue = () => {
         size: '',
         base64: '',
     }
+}
+
+const fileSize = (size) => {
+    const mult = 100;
+    return size < 1024 ?
+        `${size} Bytes`
+        : size < (1024 * 1024) ?
+            `${Math.round((size / 1024) * mult) / mult} KB`
+            : `${Math.round((size / (1024 * 1024)) * mult) / mult} MB`
 }
 
 const styles = StyleSheet.create({
@@ -172,5 +186,10 @@ const styles = StyleSheet.create({
     imageButtons: {
         height: 50,
         width: 50,
+    },
+
+    textArchivo: {
+        color: '#979DAC',
+        fontSize: 15,
     },
 })
