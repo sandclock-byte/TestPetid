@@ -97,6 +97,30 @@ export default function Archivo() {
                 <Text style={styles.text}>para envíar</Text>
             </View>
 
+            <View style={{
+                height: '68.5%',
+                alignItems: 'center',
+                justifyContent: 'center',
+            }}>
+                <View style={{
+                    backgroundColor: '#33415c',
+                    borderRadius: 30,
+                    padding: 30,
+                }}>
+                    <View style={{
+                        alignItems: 'center',
+                        marginBottom: 15,
+                        }}>
+                        <Image
+                        style={{height: 80, width: 80}}
+                            source={require('../assets/Archivo/archivo.png')}
+                        />
+                    </View>
+                    <Text style={styles.text}>Selecciona un Archivo</Text>
+                    <Text style={styles.text}>para envíar</Text>
+                </View>
+            </View>
+
             {showActions}
 
         </>
