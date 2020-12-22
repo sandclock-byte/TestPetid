@@ -90,8 +90,6 @@ const defaultValue = () => {
     }
 }
 
-
-
 const styles = StyleSheet.create({
     InstructionsContent: {
         marginTop: '5%',
