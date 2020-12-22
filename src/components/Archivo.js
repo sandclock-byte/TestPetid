@@ -1,30 +1,45 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 import DocumentPicker from 'react-native-document-picker';
 import RNFetchBlob from 'rn-fetch-blob';
 
-const chooseAFile = async () => {
-    try {
-        const res = await DocumentPicker.pick({
-            type: [DocumentPicker.types.allFiles],
-        });
-        // console.log(res.uri);
-        // console.log(res.type); // mime type
-        // console.log(res.name);
-        // console.log(res.size);
+export default function Archivo() {
 
-        const result = await RNFetchBlob.fs.readFile(res.uri, 'base64');
-        console.log(result);
-    } catch (err) {
-        if (DocumentPicker.isCancel(err)) {
-            // User cancelled the picker, exit any dialogs or menus and move on
-        } else {
-            throw err;
+    const [file, setFile] = useState(defaultValue());
+
+    const chooseAFile = async () => {
+        try {
+            const res = await DocumentPicker.pick({
+                type: [DocumentPicker.types.allFiles],
+            });
+            const result = await RNFetchBlob.fs.readFile(res.uri, 'base64');
+
+            setFile({
+                ...file,
+                uri:res.uri,
+                type: res.type,
+                name: res.name,
+                size: res.size,
+                base64: result,
+            });
+
+            console.log(file);
+
+            // setFile({ ...file, uri: res.uri });
+            // setFile({ ...file, type: res.type }); // mime type
+            // setFile({ ...file, name: res.name });
+            // setFile({ ...file, size: res.size });
+            // setFile({ ...file, base64: result });
+            
+        } catch (err) {
+            if (DocumentPicker.isCancel(err)) {
+                // User cancelled the picker, exit any dialogs or menus and move on
+            } else {
+                throw err;
+            }
         }
     }
-}
 
-export default function Archivo() {
     return (
         <>
             <View style={styles.InstructionsContent}>
@@ -33,11 +48,20 @@ export default function Archivo() {
             </View>
 
             <View style={styles.viewButtons}>
-                <TouchableOpacity onPress={chooseAFile}>
+                <TouchableOpacity onPress={() => chooseAFile()}>
                     <View style={styles.actionButton}>
                         <Image
                             style={styles.imageButtons}
                             source={require('../assets/Archivo/adjuntar.png')}
+                        />
+                    </View>
+                </TouchableOpacity>
+
+                <TouchableOpacity onPress={() => { }}>
+                    <View style={styles.actionButton}>
+                        <Image
+                            style={styles.imageButtons}
+                            source={require('../assets/Archivo/enviar.png')}
                         />
                     </View>
                 </TouchableOpacity>
@@ -55,6 +79,16 @@ export default function Archivo() {
         </>
 
     )
+}
+
+const defaultValue = () => {
+    return {
+        uri: '',
+        type: '',
+        name: '',
+        size: '',
+        base64: '',
+    }
 }
 
 const styles = StyleSheet.create({
