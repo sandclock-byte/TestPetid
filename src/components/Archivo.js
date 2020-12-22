@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 import DocumentPicker from 'react-native-document-picker';
 import RNFetchBlob from 'rn-fetch-blob';
@@ -7,6 +7,41 @@ export default function Archivo() {
 
     const [file, setFile] = useState(defaultValue());
     const [fileTram, setFileTram] = useState('');
+
+    useEffect(() => {
+        if (file.base64 != '') {
+            let act =
+                <View style={styles.viewButtons}>
+                    <TouchableOpacity onPress={() => chooseAFile()}>
+                        <View style={styles.actionButton}>
+                            <Image
+                                style={styles.imageButtons}
+                                source={require('../assets/Archivo/adjuntar.png')}
+                            />
+                        </View>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity onPress={() => sendFile()}>
+                        <View style={styles.actionButton}>
+                            <Image
+                                style={styles.imageButtons}
+                                source={require('../assets/Archivo/enviar.png')}
+                            />
+                        </View>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity onPress={() => { }}>
+                        <View style={styles.actionButton}>
+                            <Image
+                                style={styles.imageButtons}
+                                source={require('../assets/Archivo/guardar.png')}
+                            />
+                        </View>
+                    </TouchableOpacity>
+                </View>;
+            setShowActions(act);
+        }
+    }, [file])
 
     const chooseAFile = async () => {
         try {
@@ -33,6 +68,22 @@ export default function Archivo() {
         }
     }
 
+    let actions =
+        <View style={styles.viewButtons}>
+
+            <TouchableOpacity onPress={() => chooseAFile()}>
+                <View style={styles.actionButton}>
+                    <Image
+                        style={styles.imageButtons}
+                        source={require('../assets/Archivo/adjuntar.png')}
+                    />
+                </View>
+            </TouchableOpacity>
+
+        </View>;
+
+    const [showActions, setShowActions] = useState(actions);
+
     const sendFile = () => {
         const tramaArchivo = `*${file.base64}#`
         setFileTram(tramaArchivo);
@@ -46,34 +97,7 @@ export default function Archivo() {
                 <Text style={styles.text}>para envíar</Text>
             </View>
 
-            <View style={styles.viewButtons}>
-                <TouchableOpacity onPress={() => chooseAFile()}>
-                    <View style={styles.actionButton}>
-                        <Image
-                            style={styles.imageButtons}
-                            source={require('../assets/Archivo/adjuntar.png')}
-                        />
-                    </View>
-                </TouchableOpacity>
-
-                <TouchableOpacity onPress={() => sendFile()}>
-                    <View style={styles.actionButton}>
-                        <Image
-                            style={styles.imageButtons}
-                            source={require('../assets/Archivo/enviar.png')}
-                        />
-                    </View>
-                </TouchableOpacity>
-
-                <TouchableOpacity onPress={() => { }}>
-                    <View style={styles.actionButton}>
-                        <Image
-                            style={styles.imageButtons}
-                            source={require('../assets/Archivo/guardar.png')}
-                        />
-                    </View>
-                </TouchableOpacity>
-            </View>
+            {showActions}
 
         </>
 
