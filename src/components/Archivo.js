@@ -1,5 +1,24 @@
-import React from 'react'
-import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native'
+import React from 'react';
+import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
+import DocumentPicker from 'react-native-document-picker';
+
+const chooseAFile = async () => {
+    try {
+        const res = await DocumentPicker.pick({
+            type: [DocumentPicker.types.allFiles],
+        });
+        console.log(res.uri);
+        console.log(res.type); // mime type
+        console.log(res.name);
+        console.log(res.size);
+    } catch (err) {
+        if (DocumentPicker.isCancel(err)) {
+            // User cancelled the picker, exit any dialogs or menus and move on
+        } else {
+            throw err;
+        }
+    }
+}
 
 export default function Archivo() {
     return (
@@ -10,7 +29,7 @@ export default function Archivo() {
             </View>
 
             <View style={styles.viewButtons}>
-                <TouchableOpacity onPress={() => { }}>
+                <TouchableOpacity onPress={chooseAFile}>
                     <View style={styles.actionButton}>
                         <Image
                             style={styles.imageButtons}
