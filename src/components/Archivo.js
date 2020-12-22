@@ -118,7 +118,7 @@ export default function Archivo() {
                     }}>
                         <Image
                             style={{ height: 80, width: 80 }}
-                            source={require('../assets/Archivo/archivo.png')}
+                            source={require('../assets/Archivo/FileTypeIcon/txt.png')}
                         />
                     </View>
                     <Text style={styles.text}>Nombre: Imagen2.jpg</Text>
