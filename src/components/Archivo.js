@@ -1,16 +1,20 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 import DocumentPicker from 'react-native-document-picker';
+import RNFetchBlob from 'rn-fetch-blob';
 
 const chooseAFile = async () => {
     try {
         const res = await DocumentPicker.pick({
             type: [DocumentPicker.types.allFiles],
         });
-        console.log(res.uri);
-        console.log(res.type); // mime type
-        console.log(res.name);
-        console.log(res.size);
+        // console.log(res.uri);
+        // console.log(res.type); // mime type
+        // console.log(res.name);
+        // console.log(res.size);
+
+        const result = await RNFetchBlob.fs.readFile(res.uri, 'base64');
+        console.log(result);
     } catch (err) {
         if (DocumentPicker.isCancel(err)) {
             // User cancelled the picker, exit any dialogs or menus and move on
