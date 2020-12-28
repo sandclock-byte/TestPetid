@@ -109,7 +109,7 @@ export default function Archivo() {
     const [showDetails, setShowDetails] = useState(details)
 
     const sendFile = () => {
-        const tramaArchivo = `*${file.base64}#`
+        const tramaArchivo = `*${file.name};${file.base64}#`
         setFileTram(tramaArchivo);
         console.log(tramaArchivo);
     }
