@@ -31,7 +31,7 @@ export default function Archivo() {
                         </View>
                     </TouchableOpacity>
 
-                    <TouchableOpacity onPress={() => { }}>
+                    <TouchableOpacity onPress={() => saveFile()}>
                         <View style={styles.actionButton}>
                             <Image
                                 style={styles.imageButtons}
@@ -112,6 +112,15 @@ export default function Archivo() {
         const tramaArchivo = `*${file.name};${file.base64}#`
         setFileTram(tramaArchivo);
         console.log(tramaArchivo);
+    }
+
+    const saveFile = () => {
+        let index = fileTram.indexOf(';');
+        let fileName = fileTram.slice(1, index);
+        let base64File = fileTram.slice(index + 1, fileTram.length -1);
+
+        console.log(fileName);
+        console.log(base64File);
     }
 
     return (
