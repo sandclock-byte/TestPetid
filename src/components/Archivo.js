@@ -43,23 +43,23 @@ export default function Archivo() {
                     </TouchableOpacity>
                 </View>;
             setShowActions(act);
-           
+
             let type = getFileType(file.name);
-            let deta = 
-            <View style={styles.viewDetails}>
-                <View style={styles.viewContentDetails}>
-                    <View style={styles.viewIconDetails}>
-                        <Image
-                            style={styles.iconDetails}
-                            source={{
-                                uri: getIcon(type)
-                            }}
-                        />
+            let deta =
+                <View style={styles.viewDetails}>
+                    <View style={styles.viewContentDetails}>
+                        <View style={styles.viewIconDetails}>
+                            <Image
+                                style={styles.iconDetails}
+                                source={{
+                                    uri: getIcon(type)
+                                }}
+                            />
+                        </View>
+                        <Text style={styles.text}>Nombre: {file.name}</Text>
+                        <Text style={styles.text}>Tamaño: {fileSize(file.size)}</Text>
                     </View>
-                    <Text style={styles.text}>Nombre: {file.name}</Text>
-                    <Text style={styles.text}>Tamaño: {fileSize(file.size)}</Text>
-                </View>
-            </View>;
+                </View>;
 
             setShowDetails(deta);
         }
@@ -132,8 +132,12 @@ const saveFile = (tramaArchivo) => {
     let fileName = tramaArchivo.slice(1, index);
     let base64File = tramaArchivo.slice(index + 1, tramaArchivo.length - 1);
 
-    console.log(fileName);
-    console.log(base64File);
+    // console.log(fileName);
+    // console.log(base64File);
+
+    let dirs = `${RNFetchBlob.fs.dirs.SDCardDir}/PET/${fileName}`;
+    // console.log(dirs);
+    RNFetchBlob.fs.writeFile(dirs, base64File, "base64");
 }
 
 const defaultValue = () => {
