@@ -7,10 +7,12 @@ import { fileSize, getFileType, getIcon } from '../utils/fileUtils'
 export default function Archivo() {
 
     const [file, setFile] = useState(defaultValue());
-    const [fileTram, setFileTram] = useState('');
 
     useEffect(() => {
         if (file.base64 != '') {
+
+            let tramaArchivo = `*${file.name};${file.base64}#`;
+
             let act =
                 <View style={styles.viewButtons}>
                     <TouchableOpacity onPress={() => chooseAFile()}>
@@ -22,7 +24,7 @@ export default function Archivo() {
                         </View>
                     </TouchableOpacity>
 
-                    <TouchableOpacity onPress={() => sendFile()}>
+                    <TouchableOpacity onPress={() => sendFile(tramaArchivo)}>
                         <View style={styles.actionButton}>
                             <Image
                                 style={styles.imageButtons}
@@ -31,7 +33,7 @@ export default function Archivo() {
                         </View>
                     </TouchableOpacity>
 
-                    <TouchableOpacity onPress={() => saveFile()}>
+                    <TouchableOpacity onPress={() => saveFile(tramaArchivo)}>
                         <View style={styles.actionButton}>
                             <Image
                                 style={styles.imageButtons}
@@ -41,10 +43,7 @@ export default function Archivo() {
                     </TouchableOpacity>
                 </View>;
             setShowActions(act);
-            // console.log(file.uri);
-            // console.log(file.type);
-            // console.log(file.name);
-            // console.log(file.size);
+           
             let type = getFileType(file.name);
             let deta = 
             <View style={styles.viewDetails}>
@@ -108,21 +107,6 @@ export default function Archivo() {
     const [showActions, setShowActions] = useState(actions);
     const [showDetails, setShowDetails] = useState(details)
 
-    const sendFile = () => {
-        const tramaArchivo = `*${file.name};${file.base64}#`
-        setFileTram(tramaArchivo);
-        console.log(tramaArchivo);
-    }
-
-    const saveFile = () => {
-        let index = fileTram.indexOf(';');
-        let fileName = fileTram.slice(1, index);
-        let base64File = fileTram.slice(index + 1, fileTram.length -1);
-
-        console.log(fileName);
-        console.log(base64File);
-    }
-
     return (
         <>
             <View style={styles.InstructionsContent}>
@@ -137,6 +121,19 @@ export default function Archivo() {
         </>
 
     )
+}
+
+const sendFile = (tramaArchivo) => {
+    console.log(tramaArchivo);
+}
+
+const saveFile = (tramaArchivo) => {
+    let index = tramaArchivo.indexOf(';');
+    let fileName = tramaArchivo.slice(1, index);
+    let base64File = tramaArchivo.slice(index + 1, tramaArchivo.length - 1);
+
+    console.log(fileName);
+    console.log(base64File);
 }
 
 const defaultValue = () => {
