@@ -31,7 +31,10 @@ local.properties
 
 # node.js
 #
-node_modules/
+node_modules/*
+!react-native-image-base64/
+
+debug.log
 npm-debug.log
 yarn-error.log
 

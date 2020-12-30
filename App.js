@@ -6,7 +6,7 @@ import Imagen from './src/components/Imagen';
 import Archivo from './src/components/Archivo';
 
 
-const changeScreen = (screen) => {
+const showScreen = (screen) => {
   switch (screen) {
     case 1:
       return <QR />;
@@ -19,13 +19,14 @@ const changeScreen = (screen) => {
 
 export default function App() {
 
-  const [screen, setScreen] = useState(1);
+  // const [screen, setScreen] = useState(1);
+  const [screen, setScreen] = useState(3);
 
   return (
     <>
       <StatusBar barStyle='light-content' />
       <SafeAreaView style={styles.background}>
-        {changeScreen(screen)}
+        {showScreen(screen)}
         <ActionBar
           setScreen={setScreen}
         />
@@ -36,7 +37,7 @@ export default function App() {
 
 const styles = StyleSheet.create({
   background: {
-    backgroundColor: '#023E7D',
+    backgroundColor: '#001233',
     height: '100%',
   }
 });
