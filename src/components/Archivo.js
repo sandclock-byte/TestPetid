@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 import DocumentPicker from 'react-native-document-picker';
 import RNFetchBlob from 'rn-fetch-blob';
-import * as FileUtils from '../utils/fileUtils'
+import {fileSize, getFileType, sendFile, saveFile, getIcon} from '../utils/fileUtils'
 
 export default function Archivo() {
 
@@ -24,7 +24,7 @@ export default function Archivo() {
                         </View>
                     </TouchableOpacity>
 
-                    <TouchableOpacity onPress={() => FileUtils.sendFile(tramaArchivo)}>
+                    <TouchableOpacity onPress={() => sendFile(tramaArchivo)}>
                         <View style={styles.actionButton}>
                             <Image
                                 style={styles.imageButtons}
@@ -33,7 +33,7 @@ export default function Archivo() {
                         </View>
                     </TouchableOpacity>
 
-                    <TouchableOpacity onPress={() => FileUtils.saveFile(tramaArchivo)}>
+                    <TouchableOpacity onPress={() => saveFile(tramaArchivo)}>
                         <View style={styles.actionButton}>
                             <Image
                                 style={styles.imageButtons}
@@ -44,7 +44,7 @@ export default function Archivo() {
                 </View>;
             setShowActions(act);
 
-            let type = FileUtils.getFileType(file.name);
+            let type = getFileType(file.name);
             let deta =
                 <View style={styles.viewDetails}>
                     <View style={styles.viewContentDetails}>
@@ -52,12 +52,12 @@ export default function Archivo() {
                             <Image
                                 style={styles.iconDetails}
                                 source={{
-                                    uri: FileUtils.getIcon(type)
+                                    uri: getIcon(type)
                                 }}
                             />
                         </View>
                         <Text style={styles.text}>Nombre: {file.name}</Text>
-                        <Text style={styles.text}>Tamaño: {FileUtils.fileSize(file.size)}</Text>
+                        <Text style={styles.text}>Tamaño: {fileSize(file.size)}</Text>
                     </View>
                 </View>;
 

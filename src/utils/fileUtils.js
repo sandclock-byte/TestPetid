@@ -1,4 +1,6 @@
 
+import RNFetchBlob from 'rn-fetch-blob';
+
 export const fileSize = (size) => {
     const mult = 100;
     return size < 1024 ?
