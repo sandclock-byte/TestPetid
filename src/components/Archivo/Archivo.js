@@ -24,7 +24,6 @@ export default function Archivo() {
                         <View style={styles.actionButton}>
                             <Image
                                 style={styles.imageButtons}
-                                // source={require('../../assets/Archivo/adjuntar.png')}
                                 source={require('../../assets/Archivo/adjuntar.png')}
                             />
                         </View>
@@ -124,7 +123,7 @@ export default function Archivo() {
 
             {/* {showActions} */}
 
-            <FileActions chooseAFile={chooseAFile} />
+            <FileActions isFileSelected = {true} chooseAFile={chooseAFile} />
 
         </>
 

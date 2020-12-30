@@ -2,8 +2,32 @@ import React from 'react'
 import { StyleSheet, View, TouchableOpacity, Image } from 'react-native'
 
 export default function FileActions(props) {
+    const { isFileSelected, chooseAFile } = props;
+    let moreActions =
+        isFileSelected ?
+            {
+                send:
+                    <TouchableOpacity onPress={() => sendFile(tramaArchivo)}>
+                        <View style={styles.actionButton}>
+                            <Image
+                                style={styles.imageButtons}
+                                source={require('../../assets/Archivo/enviar.png')}
+                            />
+                        </View>
+                    </TouchableOpacity>,
 
-    const { chooseAFile } = props;
+                save:
+                    <TouchableOpacity onPress={() => saveFile(tramaArchivo)}>
+                        <View style={styles.actionButton}>
+                            <Image
+                                style={styles.imageButtons}
+                                source={require('../../assets/Archivo/guardar.png')}
+                            />
+                        </View>
+                    </TouchableOpacity>
+            }
+            : {};
+
     return (
         <View style={styles.viewButtons}>
 
@@ -15,6 +39,9 @@ export default function FileActions(props) {
                     />
                 </View>
             </TouchableOpacity>
+
+            {moreActions.send}
+            {moreActions.save}
 
         </View>
     )
