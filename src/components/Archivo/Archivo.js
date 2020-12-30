@@ -7,6 +7,8 @@ import { fileSize, getFileType, sendFile, saveFile, getIcon } from '../../utils/
 
 export default function Archivo() {
 
+    const [isFileSelected, setIsFileSelected] = useState(false);
+
     const [file, setFile] = useState({
         name: '',
         size: '',
@@ -84,6 +86,8 @@ export default function Archivo() {
                 base64: result,
             });
 
+            setIsFileSelected(true);
+
         } catch (err) {
             if (DocumentPicker.isCancel(err)) {
                 // User cancelled the picker, exit any dialogs or menus and move on
@@ -123,7 +127,10 @@ export default function Archivo() {
 
             {/* {showActions} */}
 
-            <FileActions isFileSelected = {true} chooseAFile={chooseAFile} />
+            <FileActions
+                isFileSelected={isFileSelected}
+                chooseAFile={chooseAFile}
+            />
 
         </>
 
