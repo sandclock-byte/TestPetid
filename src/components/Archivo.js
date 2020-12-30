@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 import DocumentPicker from 'react-native-document-picker';
 import RNFetchBlob from 'rn-fetch-blob';
-import { fileSize, getFileType, getIcon } from '../utils/fileUtils'
+import * as FileUtils from '../utils/fileUtils'
 
 export default function Archivo() {
 
@@ -24,7 +24,7 @@ export default function Archivo() {
                         </View>
                     </TouchableOpacity>
 
-                    <TouchableOpacity onPress={() => sendFile(tramaArchivo)}>
+                    <TouchableOpacity onPress={() => FileUtils.sendFile(tramaArchivo)}>
                         <View style={styles.actionButton}>
                             <Image
                                 style={styles.imageButtons}
@@ -33,7 +33,7 @@ export default function Archivo() {
                         </View>
                     </TouchableOpacity>
 
-                    <TouchableOpacity onPress={() => saveFile(tramaArchivo)}>
+                    <TouchableOpacity onPress={() => FileUtils.saveFile(tramaArchivo)}>
                         <View style={styles.actionButton}>
                             <Image
                                 style={styles.imageButtons}
@@ -44,7 +44,7 @@ export default function Archivo() {
                 </View>;
             setShowActions(act);
 
-            let type = getFileType(file.name);
+            let type = FileUtils.getFileType(file.name);
             let deta =
                 <View style={styles.viewDetails}>
                     <View style={styles.viewContentDetails}>
@@ -52,12 +52,12 @@ export default function Archivo() {
                             <Image
                                 style={styles.iconDetails}
                                 source={{
-                                    uri: getIcon(type)
+                                    uri: FileUtils.getIcon(type)
                                 }}
                             />
                         </View>
                         <Text style={styles.text}>Nombre: {file.name}</Text>
-                        <Text style={styles.text}>Tamaño: {fileSize(file.size)}</Text>
+                        <Text style={styles.text}>Tamaño: {FileUtils.fileSize(file.size)}</Text>
                     </View>
                 </View>;
 
@@ -123,22 +123,6 @@ export default function Archivo() {
     )
 }
 
-const sendFile = (tramaArchivo) => {
-    console.log(tramaArchivo);
-}
-
-const saveFile = (tramaArchivo) => {
-    let index = tramaArchivo.indexOf(';');
-    let fileName = tramaArchivo.slice(1, index);
-    let base64File = tramaArchivo.slice(index + 1, tramaArchivo.length - 1);
-
-    // console.log(fileName);
-    // console.log(base64File);
-
-    let dirs = `${RNFetchBlob.fs.dirs.SDCardDir}/PET/${fileName}`;
-    // console.log(dirs);
-    RNFetchBlob.fs.writeFile(dirs, base64File, "base64");
-}
 
 const defaultValue = () => {
     return {

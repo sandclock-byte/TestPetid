@@ -12,6 +12,19 @@ export const getFileType = (fileName) => {
     return fileName.split('.').pop();
 }
 
+export const sendFile = (tramaArchivo) => {
+    console.log(tramaArchivo);
+}
+
+export const saveFile = (tramaArchivo) => {
+    let index = tramaArchivo.indexOf(';');
+    let fileName = tramaArchivo.slice(1, index);
+    let base64File = tramaArchivo.slice(index + 1, tramaArchivo.length - 1);
+
+    let dirs = `${RNFetchBlob.fs.dirs.SDCardDir}/PET/${fileName}`;
+    RNFetchBlob.fs.writeFile(dirs, base64File, "base64");
+}
+
 export const getIcon = (type) => {
     let ext = type.toUpperCase();
     let fileIcon;
