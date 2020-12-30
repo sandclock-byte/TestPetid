@@ -130,6 +130,7 @@ export default function Archivo() {
             <FileActions
                 isFileSelected={isFileSelected}
                 chooseAFile={chooseAFile}
+                file={file}
             />
 
         </>

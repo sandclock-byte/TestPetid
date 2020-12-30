@@ -1,8 +1,10 @@
-import React from 'react'
-import { StyleSheet, View, TouchableOpacity, Image } from 'react-native'
+import React from 'react';
+import { StyleSheet, View, TouchableOpacity, Image } from 'react-native';
+import { sendFile, saveFile } from '../../utils/fileUtils'
 
 export default function FileActions(props) {
-    const { isFileSelected, chooseAFile } = props;
+    const { isFileSelected, chooseAFile, file } = props;
+    let tramaArchivo = `*${file.name};${file.base64}#`;
     let moreActions =
         isFileSelected ?
             {
