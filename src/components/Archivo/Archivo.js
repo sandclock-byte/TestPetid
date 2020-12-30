@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
+import FileActions from './FileActions';
 import DocumentPicker from 'react-native-document-picker';
 import RNFetchBlob from 'rn-fetch-blob';
 import { fileSize, getFileType, sendFile, saveFile, getIcon } from '../../utils/fileUtils'
@@ -121,7 +122,9 @@ export default function Archivo() {
 
             {showDetails}
 
-            {showActions}
+            {/* {showActions} */}
+
+            <FileActions chooseAFile={chooseAFile} />
 
         </>
 
