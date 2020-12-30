@@ -2,11 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 import DocumentPicker from 'react-native-document-picker';
 import RNFetchBlob from 'rn-fetch-blob';
-import {fileSize, getFileType, sendFile, saveFile, getIcon} from '../utils/fileUtils'
+import { fileSize, getFileType, sendFile, saveFile, getIcon } from '../../utils/fileUtils'
 
 export default function Archivo() {
 
-    const [file, setFile] = useState(defaultValue());
+    const [file, setFile] = useState({
+        name: '',
+        size: '',
+        base64: '',
+    });
 
     useEffect(() => {
         if (file.base64 != '') {
@@ -19,7 +23,8 @@ export default function Archivo() {
                         <View style={styles.actionButton}>
                             <Image
                                 style={styles.imageButtons}
-                                source={require('../assets/Archivo/adjuntar.png')}
+                                // source={require('../../assets/Archivo/adjuntar.png')}
+                                source={require('../../assets/Archivo/adjuntar.png')}
                             />
                         </View>
                     </TouchableOpacity>
@@ -28,7 +33,7 @@ export default function Archivo() {
                         <View style={styles.actionButton}>
                             <Image
                                 style={styles.imageButtons}
-                                source={require('../assets/Archivo/enviar.png')}
+                                source={require('../../assets/Archivo/enviar.png')}
                             />
                         </View>
                     </TouchableOpacity>
@@ -37,7 +42,7 @@ export default function Archivo() {
                         <View style={styles.actionButton}>
                             <Image
                                 style={styles.imageButtons}
-                                source={require('../assets/Archivo/guardar.png')}
+                                source={require('../../assets/Archivo/guardar.png')}
                             />
                         </View>
                     </TouchableOpacity>
@@ -95,7 +100,7 @@ export default function Archivo() {
                 <View style={styles.actionButton}>
                     <Image
                         style={styles.imageButtons}
-                        source={require('../assets/Archivo/adjuntar.png')}
+                        source={require('../../assets/Archivo/adjuntar.png')}
                     />
                 </View>
             </TouchableOpacity>
@@ -121,15 +126,6 @@ export default function Archivo() {
         </>
 
     )
-}
-
-
-const defaultValue = () => {
-    return {
-        name: '',
-        size: '',
-        base64: '',
-    }
 }
 
 const styles = StyleSheet.create({
