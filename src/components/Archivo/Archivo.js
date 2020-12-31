@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 import FileActions from './FileActions';
+import FileDetails from './FileDetails';
 import DocumentPicker from 'react-native-document-picker';
 import RNFetchBlob from 'rn-fetch-blob';
-import { fileSize, getFileType, sendFile, saveFile, getIcon } from '../../utils/fileUtils'
+import { fileSize, getFileType, sendFile, saveFile, getIcon } from '../../utils/fileUtils';
 
 export default function Archivo() {
 
@@ -17,39 +18,6 @@ export default function Archivo() {
 
     useEffect(() => {
         if (file.base64 != '') {
-
-            let tramaArchivo = `*${file.name};${file.base64}#`;
-
-            let act =
-                <View style={styles.viewButtons}>
-                    <TouchableOpacity onPress={() => chooseAFile()}>
-                        <View style={styles.actionButton}>
-                            <Image
-                                style={styles.imageButtons}
-                                source={require('../../assets/Archivo/adjuntar.png')}
-                            />
-                        </View>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity onPress={() => sendFile(tramaArchivo)}>
-                        <View style={styles.actionButton}>
-                            <Image
-                                style={styles.imageButtons}
-                                source={require('../../assets/Archivo/enviar.png')}
-                            />
-                        </View>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity onPress={() => saveFile(tramaArchivo)}>
-                        <View style={styles.actionButton}>
-                            <Image
-                                style={styles.imageButtons}
-                                source={require('../../assets/Archivo/guardar.png')}
-                            />
-                        </View>
-                    </TouchableOpacity>
-                </View>;
-            setShowActions(act);
 
             let type = getFileType(file.name);
             let deta =
@@ -123,7 +91,12 @@ export default function Archivo() {
                 <Text style={styles.text}>para envíar</Text>
             </View>
 
-            {showDetails}
+            {/* {showDetails} */}
+
+            <FileDetails
+                isFileSelected={isFileSelected}
+                file={file}
+            />
 
             {/* {showActions} */}
 
