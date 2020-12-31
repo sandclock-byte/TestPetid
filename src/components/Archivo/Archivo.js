@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 import FileActions from './FileActions';
 import FileDetails from './FileDetails';
 import DocumentPicker from 'react-native-document-picker';
 import RNFetchBlob from 'rn-fetch-blob';
-import { fileSize, getFileType, sendFile, saveFile, getIcon } from '../../utils/fileUtils';
 
 export default function Archivo() {
 
@@ -15,30 +14,6 @@ export default function Archivo() {
         size: '',
         base64: '',
     });
-
-    useEffect(() => {
-        if (file.base64 != '') {
-
-            let type = getFileType(file.name);
-            let deta =
-                <View style={styles.viewDetails}>
-                    <View style={styles.viewContentDetails}>
-                        <View style={styles.viewIconDetails}>
-                            <Image
-                                style={styles.iconDetails}
-                                source={{
-                                    uri: getIcon(type)
-                                }}
-                            />
-                        </View>
-                        <Text style={styles.text}>Nombre: {file.name}</Text>
-                        <Text style={styles.text}>Tamaño: {fileSize(file.size)}</Text>
-                    </View>
-                </View>;
-
-            setShowDetails(deta);
-        }
-    }, [file])
 
     const chooseAFile = async () => {
         try {
@@ -65,25 +40,6 @@ export default function Archivo() {
         }
     }
 
-    let actions =
-        <View style={styles.viewButtons}>
-
-            <TouchableOpacity onPress={() => chooseAFile()}>
-                <View style={styles.actionButton}>
-                    <Image
-                        style={styles.imageButtons}
-                        source={require('../../assets/Archivo/adjuntar.png')}
-                    />
-                </View>
-            </TouchableOpacity>
-
-        </View>;
-
-    let details = <View></View>;
-
-    const [showActions, setShowActions] = useState(actions);
-    const [showDetails, setShowDetails] = useState(details)
-
     return (
         <>
             <View style={styles.InstructionsContent}>
@@ -91,21 +47,16 @@ export default function Archivo() {
                 <Text style={styles.text}>para envíar</Text>
             </View>
 
-            {/* {showDetails} */}
-
             <FileDetails
                 isFileSelected={isFileSelected}
                 file={file}
             />
-
-            {/* {showActions} */}
 
             <FileActions
                 isFileSelected={isFileSelected}
                 chooseAFile={chooseAFile}
                 file={file}
             />
-
         </>
 
     )
@@ -121,57 +72,5 @@ const styles = StyleSheet.create({
     text: {
         color: '#979DAC',
         fontSize: 22,
-    },
-
-    viewDetails: {
-        height: '68.5%',
-        marginHorizontal: 25,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-
-    viewContentDetails: {
-        backgroundColor: '#33415c',
-        borderRadius: 30,
-        padding: 20,
-    },
-
-    viewIconDetails: {
-        alignItems: 'center',
-        marginBottom: 15,
-    },
-
-    iconDetails: {
-        height: 80,
-        width: 80
-    },
-
-    viewButtons: {
-        flexDirection: 'row',
-        marginHorizontal: 0,
-        alignItems: 'center',
-        justifyContent: 'space-evenly',
-        position: 'absolute',
-        bottom: 55, width: '100%',
-    },
-
-    actionButton: {
-        marginBottom: 40,
-        backgroundColor: '#33415c',
-        borderRadius: 20,
-        paddingVertical: 10,
-        paddingHorizontal: 25,
-        alignItems: 'center',
-        width: '100%',
-    },
-
-    imageButtons: {
-        height: 50,
-        width: 50,
-    },
-
-    textArchivo: {
-        color: '#979DAC',
-        fontSize: 15,
     },
 })
