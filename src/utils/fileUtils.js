@@ -10,7 +10,7 @@ export const fileSize = (size) => {
             : `${Math.round((size / (1024 * 1024)) * mult) / mult} MB`
 }
 
-export const getFileType = (fileName) => {
+const getFileType = (fileName) => {
     return fileName.split('.').pop();
 }
 
@@ -27,8 +27,8 @@ export const saveFile = (tramaArchivo) => {
     RNFetchBlob.fs.writeFile(dirs, base64File, "base64");
 }
 
-export const getIcon = (type) => {
-    let ext = type.toUpperCase();
+export const getIcon = (fileName) => {
+    let ext = getFileType(fileName).toUpperCase();
     let fileIcon;
 
     switch (ext) {

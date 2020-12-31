@@ -1,12 +1,10 @@
 import React from 'react'
 import { StyleSheet, Text, View, Image } from 'react-native'
-import { fileSize, getFileType, getIcon } from '../../utils/fileUtils';
+import { fileSize, getIcon } from '../../utils/fileUtils';
 
 export default function FileDetails(props) {
 
     const { isFileSelected, file } = props;
-
-    let type = getFileType(file.name);
 
     let details =
         isFileSelected ?
@@ -16,7 +14,7 @@ export default function FileDetails(props) {
                         <Image
                             style={styles.iconDetails}
                             source={{
-                                uri: getIcon(type)
+                                uri: getIcon(file.name)
                             }}
                         />
                     </View>
