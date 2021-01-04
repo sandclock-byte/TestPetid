@@ -18,6 +18,7 @@
     "png-pong": "^1.0.1",
     "react": "16.13.1",
     "react-native": "^0.63.3",
+    "react-native-base64": "^0.2.1",
     "react-native-document-picker": "^4.1.1",
     "react-native-image-base64": "^0.1.4",
     "react-native-image-crop-picker": "^0.35.2",

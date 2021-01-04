@@ -1,6 +1,7 @@
 import PNGReader from '../utils/png';
 import ImageResizer from 'react-native-image-resizer';
 import ImgToBase64 from 'react-native-image-base64';
+import base64 from 'react-native-base64';
 const Buffer = require('buffer').Buffer;
 global.Buffer = Buffer; // Muy importante
 const jpeg = require('jpeg-js');
@@ -105,11 +106,6 @@ export const base64JPGtoEpaper = (base64, setValue) => {
 
 /** Función que transforma uInt8Array (arrayBuffer) en base64 */
 const arrayBufferToBase64 = buffer => {
-  let binary = '';
   let bytes = new Uint8Array(buffer);
-  let len = bytes.byteLength;
-  for (let i = 0; i < len; i++) {
-    binary += String.fromCharCode(bytes[i]);
-  }
-  return window.btoa(binary);
+  return base64.encodeFromByteArray(bytes);
 };
