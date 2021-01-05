@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, SafeAreaView, StatusBar } from 'react-native';
 import ActionBar from './src/components/ActionBar';
 import QR from './src/components/QR';
-import Imagen from './src/components/Imagen';
+import Imagen from './src/components/Imagen/Imagen';
 import Archivo from './src/components/Archivo/Archivo';
 
 
@@ -20,7 +20,7 @@ const showScreen = (screen) => {
 export default function App() {
 
   // const [screen, setScreen] = useState(1);
-  const [screen, setScreen] = useState(3);
+  const [screen, setScreen] = useState(2);
 
   return (
     <>

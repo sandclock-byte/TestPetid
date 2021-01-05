@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
-import { base64JPGtoEpaper } from '../utils/base64ToEpaper';
+import { base64JPGtoEpaper } from '../../utils/base64ToEpaper';
 
 const croperOptions = {
     width: 200,
@@ -81,7 +81,7 @@ export default function Imagen() {
                     <View style={styles.actionButton}>
                         <Image
                             style={styles.imageButtons}
-                            source={require('../assets/Imagen/cameraIcon.png')}
+                            source={require('../../assets/Imagen/cameraIcon.png')}
                         />
                     </View>
                 </TouchableOpacity>
@@ -90,7 +90,7 @@ export default function Imagen() {
                     <View style={styles.actionButton}>
                         <Image
                             style={styles.imageButtons}
-                            source={require('../assets/Imagen/galleryIcon.png')}
+                            source={require('../../assets/Imagen/galleryIcon.png')}
                         />
                     </View>
                 </TouchableOpacity>
