@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
+import ShowImage from './ShowImage';
 import ImagePicker from 'react-native-image-crop-picker';
 import { base64JPGtoEpaper } from '../../utils/base64ToEpaper';
 
@@ -74,7 +75,11 @@ export default function Imagen() {
                 <Text style={styles.text}>Selecciona una Imagen</Text>
             </View>
 
-            {showImg}
+            {/* {showImg} */}
+            <ShowImage
+                base64={base64}
+                cArray={cArray}
+            />
 
             <View style={styles.viewButtons}>
                 <TouchableOpacity onPress={() => takePhoto(setCArray, setBase64Image)}>
