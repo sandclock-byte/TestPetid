@@ -1,6 +1,7 @@
 import PNGReader from '../utils/png';
 import ImageResizer from 'react-native-image-resizer';
 import ImgToBase64 from 'react-native-image-base64';
+import base64 from 'react-native-base64';
 const Buffer = require('buffer').Buffer;
 global.Buffer = Buffer; // Muy importante
 const jpeg = require('jpeg-js');
@@ -9,40 +10,47 @@ import { epaperFilter } from './epaperFilter';
 
 
 /** 
-     * Función que genera imagen en formato "Epaper" con base64 de PNG 
-     * y modifica un estado para envíarlo
-     * 
-     * @param { base64 } base64 "Información de imagen en base64"
-     * @param { setValue } setValue "Función que modifica estado"
+     * Funciones que analizan y procesan a las imagenes en base 
+     * a las necesidades del dispositivo PET-ID 
      *
      * @author   Fernando Bernal Díaz (fernando.bernal@ditems.com)
      * @license  DITEMS
      */
 
 
-/** Método que se exporta, hace mención de los demás métodos para ejecutar el proceso */
+/** 
+  * Función que genera un string de la imagen en formato "Epaper", modifica un estado 
+  * con la cadena para porteriormente ser envíado
+  * 
+  * @param { string } base64  base64 de Imagen png
+  * @param { setState } setValue Función que modifica estado
+  */
 export async function base64PNGtoEpaper(base64, setValue) {
 
-  /** Aquí tomamos el base64 de una Imagen, se redimesiona a 200x200px y se obtiene la uri */
+  //Aquí tomamos el base64 de una Imagen, se redimesiona a 200x200px y se obtiene la uri
   let uri = await ImageResizer.createResizedImage(base64, 200, 200, 'PNG', 100)
     .then(response => {
       return response.uri;
     });
 
-  /** Se toma la uri y se obtiene base64 de imagen redimensionada */
+  // Se toma la uri y se obtiene base64 de imagen redimensionada
   let base64Resized = await ImgToBase64.getBase64String(uri)
     .then(base64String => {
       return base64String
     });
 
-  /** Se asigna en uInt8ClampedArray los valores de los pixeles puede ser en RGB o RGBA depende del móvil */
+  // Se asigna en uInt8ClampedArray los valores de los pixeles puede ser en RGB o RGBA depende del móvil
   base64ToUInt8ClampedArray(base64Resized, uInt8ClampedArray => {
-    /** Se pasa la información de los Pixeles y se asigna a estado el formato para Epaper*/
+    // Se pasa la información de los Pixeles y se asigna a estado el formato para Epaper
     toEpaper(uInt8ClampedArray, setValue);
   });
 }
 
-/** Método que se encarga de obtener la información de pixeles del base64 de Imagen */
+/**
+ * Función que se encarga de obtener la información de pixeles del base64 de Imagen
+ * @param {string} base64 Base64 de imagen PNG
+ * @param {callback} callback Callback que se ejecuta despues de extraer PixelData
+ */
 function base64ToUInt8ClampedArray(base64, callback) {
   const pngBytes = atob(base64);
   const reader = new PNGReader(pngBytes);
@@ -51,8 +59,12 @@ function base64ToUInt8ClampedArray(base64, callback) {
   });
 }
 
-/** Método que transforma binarios en Hexadecimales */
-const hexadecimales = [...'0123456789abcdef'];
+const hexadecimales = [...'0123456789abcdef']; // Utilizamos este array para identificar el Hexadecimal correspondiente.
+/**
+ * Función que transforma binarios en Hexadecimales
+ * @param {Array} bin Array de 4 binarios
+ * @return {string} Hexadecimal correspondiente al binario
+ */
 const binToHex = (bin) => {
   let posicionChar = 0;
   for (let i = 0; i < 4; i++) {
@@ -61,7 +73,11 @@ const binToHex = (bin) => {
   return hexadecimales[posicionChar];
 }
 
-/** Método que toma la información de pixeles y modifica estado con el formato Epaper. */
+/**
+ * Función que toma la información de pixeles y modifica estado con el formato Epaper.
+ * @param {Array} uInt8ClampedArray PixelData de la imagen
+ * @param {setState} setValue Función que modifica estado
+ */
 const toEpaper = (uInt8ClampedArray, setValue) => {
 
   // Esta constante nos sirve para identificar si la información del Pixel es RGBA o RGB
@@ -91,7 +107,13 @@ const toEpaper = (uInt8ClampedArray, setValue) => {
   setValue(cArray);
 }
 
-/** Función que recibe base64 de imagen en JPG, modifica state con CArray y retorna base64 en PNG de imagen con filtros. */
+/**
+ * Función que recibe base64 de imagen en JPG, modifica state con CArray y retorna base64 en PNG de imagen con filtros
+ * @param {string} base64 base64 de la imagen
+ * @param {setState} setValue Función que modifica estado
+ * 
+ * @return {string} Base64 de imagen con filtro para Epaper.
+ */
 export const base64JPGtoEpaper = (base64, setValue) => {
   const jpegData = Buffer.from(base64, 'base64'); // Se extrae buffer de base64
   let uInt8ClampedArray = jpeg.decode(jpegData).data; // Se extrae pixelData
@@ -103,13 +125,12 @@ export const base64JPGtoEpaper = (base64, setValue) => {
   return `data:image/png;base64,${arrayBufferToBase64(uInt8Array)}`; // Retorna base64 de imagen con filtro
 }
 
-/** Función que transforma uInt8Array (arrayBuffer) en base64 */
+/**
+ * Función que transforma uInt8Array (arrayBuffer) en base64 
+ * @param {Buffer} buffer Buffer de la imagen
+ * @return {string} Base64 de imagen con filtro para Epaper.
+ */
 const arrayBufferToBase64 = buffer => {
-  let binary = '';
   let bytes = new Uint8Array(buffer);
-  let len = bytes.byteLength;
-  for (let i = 0; i < len; i++) {
-    binary += String.fromCharCode(bytes[i]);
-  }
-  return window.btoa(binary);
+  return base64.encodeFromByteArray(bytes);
 };
