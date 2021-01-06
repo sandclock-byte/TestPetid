@@ -126,14 +126,14 @@ const toEpaper = (uInt8ClampedArray, setValue) => {
   // console.log('binario ultimo', binario[binario.length -1]);
 
   
-  let cArray = '';
-  for (let i = 1; i < binario.length; i ++) {
-    cArray += binToBase64(binario[i]);
+  let base64 = '';
+  for (let i = 0; i < binario.length; i++) {
+    base64 += binToBase64(binario[i]);
   }
-  cArray += '=';
+  base64 += '=';
 
   // Se modifica estado con cadena para Epaper
-  setValue(cArray);
+  setValue(base64);
 
 
   // // Se Genera la cadena con el formato para Epaper
