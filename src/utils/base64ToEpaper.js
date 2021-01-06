@@ -73,6 +73,16 @@ const binToHex = (bin) => {
   return hexadecimales[posicionChar];
 }
 
+const base64Char = [...'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/']; // Utilizamos este array para identificar el Hexadecimal correspondiente.
+const binToBase64 = (bin) => {
+  let posicionChar = 0;
+  let length = bin.length;
+  for (let i = 0; i < length; i++) {
+    posicionChar += bin[i] * Math.pow(2, (length - (i + 1)));
+  }
+  return base64Char[posicionChar];
+}
+
 /**
  * Función que toma la información de pixeles y modifica estado con el formato Epaper.
  * @param {Array} uInt8ClampedArray PixelData de la imagen
@@ -110,12 +120,20 @@ const toEpaper = (uInt8ClampedArray, setValue) => {
   }
 
   // console.log(pixels);
-  console.log("i", j);
+  // console.log("i", j);
 
-  console.log('binario', binario);
+  // console.log('binario', binario);
   // console.log('binario ultimo', binario[binario.length -1]);
 
+  
+  let cArray = '';
+  for (let i = 1; i < binario.length; i ++) {
+    cArray += binToBase64(binario[i]);
+  }
+  cArray += '=';
 
+  // Se modifica estado con cadena para Epaper
+  setValue(cArray);
 
 
   // // Se Genera la cadena con el formato para Epaper
