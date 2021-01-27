@@ -73,6 +73,16 @@ const binToHex = (bin) => {
   return hexadecimales[posicionChar];
 }
 
+const base64Char = [...'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/']; // Utilizamos este array para identificar el Hexadecimal correspondiente.
+const binToBase64 = (bin) => {
+  let posicionChar = 0;
+  let length = bin.length;
+  for (let i = 0; i < length; i++) {
+    posicionChar += bin[i] * Math.pow(2, (length - (i + 1)));
+  }
+  return base64Char[posicionChar];
+}
+
 /**
  * Función que toma la información de pixeles y modifica estado con el formato Epaper.
  * @param {Array} uInt8ClampedArray PixelData de la imagen
@@ -84,27 +94,57 @@ const toEpaper = (uInt8ClampedArray, setValue) => {
   const pixelLength = uInt8ClampedArray.length / 40000; // Toma el valor de 4 si el pixel es RGBA o 3 si es RGB.
 
   // Tomamos la información de los pixeles y los tranformamos en binarios
+  console.log('PixelData', uInt8ClampedArray.length)
   let pixels = [];
-  for (let i = pixelLength; i < uInt8ClampedArray.length; i += pixelLength) {
+  for (let i = pixelLength; i <= uInt8ClampedArray.length + 1; i += pixelLength) {
     let valor = uInt8ClampedArray[i - pixelLength]; // Solo nos fijamos en la primera coordenada de cada pixel
     valor < 127 ? pixels.push(0) : pixels.push(1); // Asignamos el valor de 0 si esta más cerca del negro y 1 si está mas cerca del blanco
   }
 
-  // Se juntan los binarios en grupos de 4
+  // // Se juntan los binarios en grupos de 4
+  // let binario = [];
+  // for (let i = 4; i < pixels.length; i += 4) {
+  //   binario.push(pixels.slice(i - 4, i));
+  // }
+
+  // Se juntan los binarios en grupos de 6
   let binario = [];
-  for (let i = 4; i < pixels.length; i += 4) {
-    binario.push(pixels.slice(i - 4, i));
+  console.log('pixels.length',pixels.length);
+  pixels.push(0, 0); // Se agregan 2 ceros para poder agruparlos en grupos de 6
+  // console.log('pixels ultimo', pixels[pixels.length -1]);
+  console.log('pixels.length',pixels.length);
+  let j = 0;
+  for (let i = 6; i <= pixels.length + 1; i += 6) {
+    binario.push(pixels.slice(i - 6, i));
+    j+=6;
   }
 
-  // Se Genera la cadena con el formato para Epaper
-  let cArray = '';
-  for (let i = 1; i < binario.length; i += 2) {
-    cArray += `0x${binToHex(binario[i - 1]) + binToHex(binario[i])}`;
-    if (i !== binario.length - 2) cArray += ',';
+  // console.log(pixels);
+  // console.log("i", j);
+
+  // console.log('binario', binario);
+  // console.log('binario ultimo', binario[binario.length -1]);
+
+  
+  let base64 = '';
+  for (let i = 0; i < binario.length; i++) {
+    base64 += binToBase64(binario[i]);
   }
+  base64 += '=';
 
   // Se modifica estado con cadena para Epaper
-  setValue(cArray);
+  setValue(base64);
+
+
+  // // Se Genera la cadena con el formato para Epaper
+  // let cArray = '';
+  // for (let i = 1; i < binario.length; i += 2) {
+  //   cArray += `0x${binToHex(binario[i - 1]) + binToHex(binario[i])}`;
+  //   if (i !== binario.length - 2) cArray += ',';
+  // }
+
+  // // Se modifica estado con cadena para Epaper
+  // setValue(cArray);
 }
 
 /**
